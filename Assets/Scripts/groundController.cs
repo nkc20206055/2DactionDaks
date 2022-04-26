@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class guardController : MonoBehaviour
+public class groundController : MonoBehaviour
 {
     [SerializeField] GameObject CounterObject;
-    public GameObject hpui;//HPのUIを入れる変数
-    public AudioClip Se1;
+
+    //public GameObject hpui;//HPのUIを入れる変数
+    //public AudioClip Se1;//SEを鳴らすオブジェクトを入れるところ
+
     public float counterTime;//カウンターできる時間
     public float damageTime;//無敵時間
 
@@ -55,24 +57,26 @@ public class guardController : MonoBehaviour
         if (damageSwicth == true)
         {
             //HPを減らす
-            if (damageHetSwcith == true)
-            {
-                for (int i = 0; i < deletehp; i++)
-                {
-                    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
-                    s.SetActive(false);
-                    hp--;
-                    Debug.Log(hp);
-                    if (hp <= 0)
-                    {
-                        damageSwicth = false;
-                        i = deletehp;
-                    }
-                }
-                deletehp = 0;
-                damageHetSwcith = false;
-                gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
-            }
+            //if (damageHetSwcith == true)
+            //{
+            //    for (int i = 0; i < deletehp; i++)
+            //    {
+            //        GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
+            //        s.SetActive(false);
+            //        hp--;
+            //        Debug.Log(hp);
+            //        if (hp <= 0)
+            //        {
+            //            damageSwicth = false;
+            //            i = deletehp;
+            //        }
+            //    }
+            //    deletehp = 0;
+            //    damageHetSwcith = false;
+            //    gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
+            //}
+
+
             cTime += 1 * Time.deltaTime;
             if (cTime < damageTime)//点滅させる
             {
@@ -103,6 +107,7 @@ public class guardController : MonoBehaviour
         countSpeed = true;
         damageHetOn = false;
         sliderS = slider.maxValue;
+        Debug.Log(sliderS);
     }
 
     // Update is called once per frame
@@ -153,7 +158,7 @@ public class guardController : MonoBehaviour
                 }
                 else if (CGtime >= counterTime) //ガード中
                 {
-                    //Debug.Log("ガード中");
+                    Debug.Log("ガード中");
                     gameObject.layer = LayerMask.NameToLayer("Default");//レイヤーマスクを戻す
                     anim.SetBool("guard", true);
                     anim.SetBool("counter", false);
@@ -218,7 +223,9 @@ public class guardController : MonoBehaviour
                 if (ECC.counterHetSwicth == true)
                 {
                     Debug.Log("当たった");
-                    AS.PlayOneShot(Se1);//SEを鳴らす
+
+                    //AS.PlayOneShot(Se1);//SEを鳴らす
+
                     gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
                     anim.SetBool("counterattack", true);
                     anim.SetBool("counter", false);
@@ -229,53 +236,53 @@ public class guardController : MonoBehaviour
             }
         }
 
-        if (damageHetOn == false)
-        {
-            if (collision.gameObject.tag == "enemyrightattack")
-            {
+        //if (damageHetOn == false)
+        //{
+        //    if (collision.gameObject.tag == "enemyrightattack")
+        //    {
 
-                damageHetSwcith = true;
-                damageSwicth = true;
-                if (gadeSwicth == true)
-                {
-                    Debug.Log("敵の弱攻撃を軽減");
-                    damageHetOn = true;
-                    //ノーダメージ
+        //        damageHetSwcith = true;
+        //        damageSwicth = true;
+        //        if (gadeSwicth == true)
+        //        {
+        //            Debug.Log("敵の弱攻撃を軽減");
+        //            damageHetOn = true;
+        //            //ノーダメージ
 
-                }
-                else
-                {
-                    Debug.Log("敵の弱攻撃がヒット");
-                    //減るのはハート1つ
-                    deletehp = 2;
-                    damageHetOn = true;
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("敵の弱攻撃がヒット");
+        //            //減るのはハート1つ
+        //            deletehp = 2;
+        //            damageHetOn = true;
 
-                }
-            }
-            else if (collision.gameObject.tag == "enemyheavyattack")
-            {
-                damageHetSwcith = true;
-                damageSwicth = true;
-                if (gadeSwicth == true)
-                {
-                    Debug.Log("敵の強攻撃を軽減");
-                    //減るのはハート半分でガードゲージが減る
-                    deletehp = 1;
-                    slider.value -= 20;
-                    sliderS = slider.value;
-                    damageHetOn = true;
+        //        }
+        //    }
+        //    else if (collision.gameObject.tag == "enemyheavyattack")
+        //    {
+        //        damageHetSwcith = true;
+        //        damageSwicth = true;
+        //        if (gadeSwicth == true)
+        //        {
+        //            Debug.Log("敵の強攻撃を軽減");
+        //            //減るのはハート半分でガードゲージが減る
+        //            deletehp = 1;
+        //            slider.value -= 20;
+        //            sliderS = slider.value;
+        //            damageHetOn = true;
 
-                    //Debug.Log(sliderS);
-                }
-                else
-                {
-                    Debug.Log("敵の強攻撃がヒット");
-                    //減るのはハート1.5つ
-                    deletehp = 3;
-                    damageHetOn = true;
+        //            //Debug.Log(sliderS);
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("敵の強攻撃がヒット");
+        //            //減るのはハート1.5つ
+        //            deletehp = 3;
+        //            damageHetOn = true;
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
     }
 }
