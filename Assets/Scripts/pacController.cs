@@ -89,7 +89,6 @@ public class pacController : MonoBehaviour
     {
         if (collision.gameObject.tag=="enemy")
         {
-            //GetComponent‚Å‚ÍEnemyController‚ðŽæ“¾‚µ‚Ä‚µ‚Ü‚¤‚Ì‚ÅGetComponentsInChildren‚ðŽg‚¤
             //EnemyDamageController damageV = collision.GetComponentsInChildren<EnemyDamageController>();
             EnemyDamageController damageV = collision.GetComponent<EnemyDamageController>();
             damageV.EnemyDamage(Edamage);
