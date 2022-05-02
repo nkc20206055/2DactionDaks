@@ -22,7 +22,8 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     private Animator anim;//Animator保存用
     private Vector3 savePos, savePlayerPos;
     private int HP;//体力
-    private float Savedirection, direction;//移動時の向き保存用,向きの値を入れる用
+    private float Savedirection, PMd,direction;//移動時の向き保存用,向きの値を入れる用
+    public bool counterHetSwicth;//カウンターが当たったら動くbool型
     void Normal()//通常時や、行動を元に戻す場合に通る
     {
         anim.SetBool("move", false);
@@ -51,7 +52,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         //Debug.Log(playerG.transform.position);
         savePlayerPos = playerG.transform.position;
         savePlayerPos = transform.position - savePlayerPos;
-        Debug.Log(savePlayerPos);
+        //Debug.Log(savePlayerPos);
         if (savePlayerPos.x <= nPosS && savePlayerPos.x >= -nPosS)//プレイヤーが範囲内に入ったら
         {
             Debug.Log("攻撃開始");
@@ -60,6 +61,8 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
             changeState(STATE.attack);
         }
         Savedirection = transform.position.x - playerG.transform.position.x;
+        //PMd = playerG.transform.position.x / -playerG.transform.position.x;
+        //Debug.Log(PMd);
         direction = 0;
         if (Savedirection>=0)//右向き
         {
@@ -83,11 +86,27 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     }
     void Counter()//カウンターをくらったとき
     {
-
+        Debug.Log("カウンター成功");
+        counterHetSwicth = false;
+        anim.SetBool("counter", true);
+        anim.SetBool("attack", false);
+        changeStateAndTime(STATE.normal, 3);
+    }
+    void CounterBool()//animationで攻撃中にカウンターされたら起動する用
+    {
+        if (counterHetSwicth==false)//起動していなかったら
+        {
+            counterHetSwicth = true;
+        }
+        else if (counterHetSwicth==true)//起動していたら
+        {
+            counterHetSwicth = false;
+        }
     }
     void Damage()//ダメージ ※ステートはanimatorの方で変えている
     {
         anim.SetBool("damage", true);
+        changeStateAndTime(STATE.normal, 3);
     }
     void DestroyM()//死亡時
     {
@@ -104,13 +123,14 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         {
             DestroyM();
         }
+        Onlyonce = true;
         changeState(STATE.damage);
     }
     private void changeState(STATE _state)//ステートを切り替える
     {
         saveState = _state;
     }
-    private void changeStateAndTime(STATE Cstate,float t)
+    private void changeStateAndTime(STATE Cstate,float t)//待機時間を設けてからステートを切り替える
     {
         if (Onlyonce == true)//最初に動く
         {
@@ -132,6 +152,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     {
         HP = MaxHP;
         Onlyonce = true;
+        counterHetSwicth = false;
         anim = GetComponent<Animator>();
         playerG = GameObject.FindWithTag("Player");
     }
@@ -170,6 +191,12 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.tag=="playercounter")
+        {
+            if (counterHetSwicth==true) {
+                //Debug.Log("ヒット");
+                changeState(STATE.counterMe);
+            }
+        }
     }
 }
