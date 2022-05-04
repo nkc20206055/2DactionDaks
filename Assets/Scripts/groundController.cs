@@ -57,24 +57,24 @@ public class groundController : MonoBehaviour
         if (damageSwicth == true)
         {
             //HPを減らす
-            //if (damageHetSwcith == true)
-            //{
-            //    for (int i = 0; i < deletehp; i++)
-            //    {
-            //        GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
-            //        s.SetActive(false);
-            //        hp--;
-            //        Debug.Log(hp);
-            //        if (hp <= 0)
-            //        {
-            //            damageSwicth = false;
-            //            i = deletehp;
-            //        }
-            //    }
-            //    deletehp = 0;
-            //    damageHetSwcith = false;
-            //    gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
-            //}
+            if (damageHetSwcith == true)
+            {
+                //for (int i = 0; i < deletehp; i++)
+                //{
+                //    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
+                //    s.SetActive(false);
+                //    hp--;
+                //    Debug.Log(hp);
+                //    if (hp <= 0)
+                //    {
+                //        damageSwicth = false;
+                //        i = deletehp;
+                //    }
+                //}
+                //deletehp = 0;
+                damageHetSwcith = false;
+                gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
+            }
 
 
             cTime += 1 * Time.deltaTime;
@@ -236,6 +236,16 @@ public class groundController : MonoBehaviour
             }
         }
 
+
+        if (damageHetOn==false)
+        {
+            if (collision.gameObject.tag == "enemyheavyattack")
+            {
+                damageHetSwcith = true;
+                damageSwicth = true;
+                damageHetOn = true;
+            }
+        }
         //if (damageHetOn == false)
         //{
         //    if (collision.gameObject.tag == "enemyrightattack")

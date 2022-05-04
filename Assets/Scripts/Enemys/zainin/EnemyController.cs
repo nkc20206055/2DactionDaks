@@ -82,15 +82,15 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     void Attack()//攻撃　※ステートはanimatorの方で変えている
     {
         anim.SetBool("attack", true);
-        changeStateAndTime(STATE.normal,3);
+        changeStateAndTime(STATE.normal, 2.5f);
     }
     void Counter()//カウンターをくらったとき
     {
-        Debug.Log("カウンター成功");
+        //Debug.Log("カウンター成功");
         counterHetSwicth = false;
         anim.SetBool("counter", true);
         anim.SetBool("attack", false);
-        changeStateAndTime(STATE.normal, 3);
+        changeStateAndTime(STATE.normal, 2.5f);
     }
     void CounterBool()//animationで攻撃中にカウンターされたら起動する用
     {
@@ -106,7 +106,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     void Damage()//ダメージ ※ステートはanimatorの方で変えている
     {
         anim.SetBool("damage", true);
-        changeStateAndTime(STATE.normal, 3);
+        changeStateAndTime(STATE.normal, 2.5f);
     }
     void DestroyM()//死亡時
     {
@@ -144,6 +144,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         }
         else
         {
+            Debug.Log(SaveTime + " , " + actionTime);
             saveState = Cstate;//ステートを切り替える
         }
     }
