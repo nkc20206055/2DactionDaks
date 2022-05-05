@@ -7,7 +7,7 @@ public class groundController : MonoBehaviour
 {
     [SerializeField] GameObject CounterObject;
 
-    //public GameObject hpui;//HPのUIを入れる変数
+    public GameObject hpui;//HPのUIを入れる変数
     //public AudioClip Se1;//SEを鳴らすオブジェクトを入れるところ
 
     public float counterTime;//カウンターできる時間
@@ -34,10 +34,10 @@ public class groundController : MonoBehaviour
     void animationcancel()//アニメーションを途中で終わらせるのに使う
     {
         anim.SetBool("counterattack", false);
-        anim.SetBool("grndbreak", false);
+        anim.SetBool("guardbreak", false);
         gameObject.layer = LayerMask.NameToLayer("Default");
         MouseSwicth = true;
-        Debug.Log("動いた");
+        //Debug.Log("動いた");
     }
     void counterONA()//カウンター成功時にカメラのcounterONが動くようにする
     {
@@ -230,7 +230,7 @@ public class groundController : MonoBehaviour
                     anim.SetBool("counterattack", true);
                     anim.SetBool("counter", false);
                     CounterObject.SetActive(false);
-                    CC.counterON();
+                    //CC.counterON();
                 }
                 counterSwicth = false;
             }
@@ -239,8 +239,16 @@ public class groundController : MonoBehaviour
 
         if (damageHetOn==false)
         {
-            if (collision.gameObject.tag == "enemyheavyattack")
+            if (collision.gameObject.tag == "enemyrightattack")
             {
+                Debug.Log("軽ダメージ");
+                damageHetSwcith = true;
+                damageSwicth = true;
+                damageHetOn = true;
+            }
+            else if (collision.gameObject.tag == "enemyheavyattack")
+            {
+                Debug.Log("重ダメージ");
                 damageHetSwcith = true;
                 damageSwicth = true;
                 damageHetOn = true;

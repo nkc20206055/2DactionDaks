@@ -17,6 +17,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
 
     float SaveTime;//
     bool Onlyonce;//一回きり動く
+    EcColliderController ECC;//ECCコンポーネントを入れるよう
 
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;//Animator保存用
@@ -55,7 +56,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         //Debug.Log(savePlayerPos);
         if (savePlayerPos.x <= nPosS && savePlayerPos.x >= -nPosS)//プレイヤーが範囲内に入ったら
         {
-            Debug.Log("攻撃開始");
+            //Debug.Log("攻撃開始");
             Onlyonce = true;
             anim.SetBool("move", false);
             changeState(STATE.attack);
@@ -144,7 +145,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         }
         else
         {
-            Debug.Log(SaveTime + " , " + actionTime);
+            //Debug.Log(SaveTime + " , " + actionTime);
             saveState = Cstate;//ステートを切り替える
         }
     }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class EcColliderController : MonoBehaviour
 {
     public bool counterHetSwicth;
+
+    int sa;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +21,10 @@ public class EcColliderController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "playerCounterattack")
+        if (collision.gameObject.tag == /*"playerCounterattack"*/"playercounter")
         {
-            //Debug.Log("ƒqƒbƒg");
+            //sa++;
+            Debug.Log("ƒqƒbƒg" /*+ sa*/);
             counterHetSwicth = true;
         }
     }
