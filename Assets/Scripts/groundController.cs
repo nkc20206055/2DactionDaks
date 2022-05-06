@@ -59,19 +59,19 @@ public class groundController : MonoBehaviour
             //HPを減らす
             if (damageHetSwcith == true)
             {
-                //for (int i = 0; i < deletehp; i++)
-                //{
-                //    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
-                //    s.SetActive(false);
-                //    hp--;
-                //    Debug.Log(hp);
-                //    if (hp <= 0)
-                //    {
-                //        damageSwicth = false;
-                //        i = deletehp;
-                //    }
-                //}
-                //deletehp = 0;
+                for (int i = 0; i < deletehp; i++)
+                {
+                    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
+                    s.SetActive(false);
+                    hp--;
+                    Debug.Log(hp);
+                    if (hp <= 0)
+                    {
+                        damageSwicth = false;
+                        i = deletehp;
+                    }
+                }
+                deletehp = 0;
                 damageHetSwcith = false;
                 gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
             }
@@ -107,7 +107,7 @@ public class groundController : MonoBehaviour
         countSpeed = true;
         damageHetOn = false;
         sliderS = slider.maxValue;
-        Debug.Log(sliderS);
+        //Debug.Log(sliderS);
     }
 
     // Update is called once per frame
@@ -118,7 +118,7 @@ public class groundController : MonoBehaviour
         {
             MouseSwicth = false;
             gadeSwicth = false;
-            anim.SetBool("grndbreak", true);
+            anim.SetBool("guardbreak", true);
             anim.SetBool("guard", false);
             damageSwicth = false;
             damageHetOn = false;
@@ -126,21 +126,6 @@ public class groundController : MonoBehaviour
             slider.value = slider.maxValue;
         }
 
-        //カウンターが成功した時
-        //if (counterSwicth==true)
-        //{
-        //    if (ECC.counterHetSwicth == true)
-        //    {
-        //        Debug.Log("当たった");
-        //        AS.PlayOneShot(Se1);//SEを鳴らす
-        //        gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
-        //        anim.SetBool("counterattack", true);
-        //        anim.SetBool("counter", false);
-        //        CounterObject.SetActive(false);
-        //        CC.counterON();
-        //    }
-        //    counterSwicth = false;
-        //}
 
         //カウンターとガードの操作
         if (MouseSwicth == true)
@@ -241,66 +226,38 @@ public class groundController : MonoBehaviour
         {
             if (collision.gameObject.tag == "enemyrightattack")
             {
-                Debug.Log("軽ダメージ");
-                damageHetSwcith = true;
-                damageSwicth = true;
-                damageHetOn = true;
+                if (gadeSwicth == false)//ガードしていないとき
+                {
+                    Debug.Log("軽ダメージ");
+                    damageHetSwcith = true;
+                    damageSwicth = true;
+                    deletehp = 2;
+                    damageHetOn = true;
+                }
+
+                //damageHetOn = true;
             }
             else if (collision.gameObject.tag == "enemyheavyattack")
             {
-                Debug.Log("重ダメージ");
-                damageHetSwcith = true;
-                damageSwicth = true;
-                damageHetOn = true;
+                if (gadeSwicth == true)//ガードした場合
+                {
+                    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
+                    s.SetActive(false);
+                    hp--;
+                    slider.value -= 20;
+                    sliderS = slider.value;
+                    //Debug.Log(hp);
+                    deletehp = 0;
+                }
+                else //ガードしなかった場合
+                {
+                    Debug.Log("重ダメージ");
+                    damageHetSwcith = true;
+                    damageSwicth = true;
+                    deletehp = 3;
+                    damageHetOn = true;
+                }
             }
         }
-        //if (damageHetOn == false)
-        //{
-        //    if (collision.gameObject.tag == "enemyrightattack")
-        //    {
-
-        //        damageHetSwcith = true;
-        //        damageSwicth = true;
-        //        if (gadeSwicth == true)
-        //        {
-        //            Debug.Log("敵の弱攻撃を軽減");
-        //            damageHetOn = true;
-        //            //ノーダメージ
-
-        //        }
-        //        else
-        //        {
-        //            Debug.Log("敵の弱攻撃がヒット");
-        //            //減るのはハート1つ
-        //            deletehp = 2;
-        //            damageHetOn = true;
-
-        //        }
-        //    }
-        //    else if (collision.gameObject.tag == "enemyheavyattack")
-        //    {
-        //        damageHetSwcith = true;
-        //        damageSwicth = true;
-        //        if (gadeSwicth == true)
-        //        {
-        //            Debug.Log("敵の強攻撃を軽減");
-        //            //減るのはハート半分でガードゲージが減る
-        //            deletehp = 1;
-        //            slider.value -= 20;
-        //            sliderS = slider.value;
-        //            damageHetOn = true;
-
-        //            //Debug.Log(sliderS);
-        //        }
-        //        else
-        //        {
-        //            Debug.Log("敵の強攻撃がヒット");
-        //            //減るのはハート1.5つ
-        //            deletehp = 3;
-        //            damageHetOn = true;
-
-        //        }
-        //    }
-        //}
     }
 }

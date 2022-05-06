@@ -30,7 +30,7 @@ public class pacController : MonoBehaviour
             if (StartSwicth == true)
             {
                 Edamage = 3;
-                CC2D.radius = 0.5f;
+                CC2D.radius = 1f;
                 heavyattackSwicth = false;
                 savePpos.x = 0;
                 speed = 5;
@@ -59,7 +59,7 @@ public class pacController : MonoBehaviour
             {
                 Edamage = 5;
                 //gameObject.tag = "playerHeavyattack";//tagÇïœçX
-                CC2D.radius = 0.5f;
+                CC2D.radius = 1.5f;
                 rightattackSwicth = false;
                 savePpos.x = 0;
                 speed = 5;

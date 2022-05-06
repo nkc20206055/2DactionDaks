@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     private Vector3 savePos, savePlayerPos;
     private int HP;//体力
     private float Savedirection, PMd,direction;//移動時の向き保存用,向きの値を入れる用
-    public bool counterHetSwicth;//カウンターが当たったら動くbool型
+    private bool counterHetSwicth;//カウンターが当たったら動くbool型
     void Normal()//通常時や、行動を元に戻す場合に通る
     {
         anim.SetBool("move", false);
@@ -156,7 +156,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         Onlyonce = true;
         counterHetSwicth = false;
         anim = GetComponent<Animator>();
-        playerG = GameObject.FindWithTag("Player");
+        playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
     }
     // Update is called once per frame
     void Update()
