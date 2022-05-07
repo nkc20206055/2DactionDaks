@@ -12,13 +12,16 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     public int MaxHP;//最大HP
     public float moveSpeed;//移動スピード
     public float nPosS;//攻撃を発生する場合のプレイヤーとの距離
-    public float actionTime;//次の行動にうつる時間
+    public float Maxattacktime;//攻撃するまでの時間
+    //public float actionTime;//次の行動にうつる時間
 
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;//Animator保存用
     private Vector3 savePos, savePlayerPos;
     private int HP;//体力
     private float Savedirection,direction;//移動時の向き保存用,向きの値を入れる用
+    private float attackTime;//攻撃するまでの時間をためる
+    private bool attackSwicth;
     private bool counterHetSwicth;//カウンターが当たったら動くbool型
     private bool guardSwicth;//ガードしているかどうか
     void Normal()
@@ -31,33 +34,53 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         anim.SetBool("counterhet", false);
         anim.SetBool("damage", false);
 
+        guardSwicth = true;
+        attackTime = 0;
+        attackSwicth = false;
+
         changeState(STATE.move);
     }
     void Move()
     {
         anim.SetBool("move", true);
+        if (attackTime>= Maxattacktime)//attackTimeがたまったら
+        {
+            attackSwicth = true;
+        }
+        else if (attackTime < Maxattacktime)//attackTimeがたまっていない
+        {
+            attackTime += 1 * Time.deltaTime;
+        }
         savePlayerPos = playerG.transform.position;//プレイヤーの位置を代入
         savePlayerPos = transform.position - savePlayerPos;//プレイヤーの位置とこれの位置を引く
         if (savePlayerPos.x <= nPosS && savePlayerPos.x >= -nPosS)//プレイヤーが範囲内に入ったら
         {
-            anim.SetFloat("moveSpeed", -1);//アニメーションを逆再生
-            Savedirection = transform.position.x - playerG.transform.position.x;//プレイヤーの向きを調べる
-            direction = 0;
-            if (Savedirection >= 0)//右向き
+            if (attackSwicth==true) //攻撃開始
             {
-                direction = -1;
-                Vector3 r = transform.localScale;
-                transform.localScale = new Vector3(direction * -1.607602f, r.y, r.z);
+                guardSwicth = false;
+                anim.SetBool("move", false);
+                changeState(STATE.attack);
             }
-            else if (Savedirection < 0)//左向き
-            {
-                direction = 1;
-                Vector3 r = transform.localScale;
-                transform.localScale = new Vector3(direction * -1.607602f, r.y, r.z);
+            else {
+                anim.SetFloat("moveSpeed", -1);//アニメーションを逆再生
+                Savedirection = transform.position.x - playerG.transform.position.x;//プレイヤーの向きを調べる
+                direction = 0;
+                if (Savedirection >= 0)//右向き
+                {
+                    direction = -1;
+                    Vector3 r = transform.localScale;
+                    transform.localScale = new Vector3(direction * -1.607602f, r.y, r.z);
+                }
+                else if (Savedirection < 0)//左向き
+                {
+                    direction = 1;
+                    Vector3 r = transform.localScale;
+                    transform.localScale = new Vector3(direction * -1.607602f, r.y, r.z);
 
+                }
+                savePos.x = -direction * moveSpeed * Time.deltaTime;
+                transform.position += savePos;
             }
-            savePos.x = -direction * moveSpeed * Time.deltaTime;
-            transform.position += savePos;
         }
         else /*if (savePlayerPos.x >= nPosS && savePlayerPos.x <= -nPosS)*/
         {
@@ -87,7 +110,8 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     }
     void Attack()//攻撃
     {
-
+        //Debug.Log("攻撃");
+        anim.SetBool("attack", true);
     }
     void Guard()//防御
     {
@@ -95,7 +119,10 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     }
     void Counter()
     {
-
+        counterHetSwicth = false;
+        guardSwicth = false;
+        anim.SetBool("counterhet", true);
+        anim.SetBool("attack", false);
     }
     void CounterBool()//animationで攻撃中にカウンターされたら起動する用
     {
@@ -110,15 +137,35 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     }
     void Damage()
     {
-
+        anim.SetBool("damage", true);
+    }
+    void Destroy()//死亡時
+    {
+        Destroy(gameObject);
     }
     public void EnemyDamage(int h)//ダメージを受けた時※インターフェース
     {
-        Debug.Log("動いた");
+        //Debug.Log("動いた");
         if (guardSwicth==true)//ガードできる状態
         {
             anim.SetBool("move", false);
+            anim.SetBool("attack", false);
+            anim.SetBool("counterhet", false);
             changeState(STATE.guard);
+        }
+        else
+        {
+            Debug.Log("damage");
+            anim.SetBool("move", false);
+            anim.SetBool("attack", false);
+            anim.SetBool("guard", false);
+            anim.SetBool("counterhet", false);
+            HP -= h;
+            if (HP<=0)//HPが0になったら
+            {
+                Destroy();//死亡
+            }
+            changeState(STATE.damage);
         }
     }
     private void changeState(STATE _state)//ステートを切り替える
@@ -129,9 +176,11 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     void Start()
     {
         HP = MaxHP;
+        attackTime = 0;
         anim = GetComponent<Animator>();
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         guardSwicth = true;
+        counterHetSwicth = false;
     }
 
     // Update is called once per frame
@@ -171,9 +220,13 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if (collision.gameObject.tag=="")
-        //{
-
-        //}
+        if (collision.gameObject.tag == "playercounter")
+        {
+            if (counterHetSwicth == true)
+            {
+                //Debug.Log("ヒット");
+                changeState(STATE.counterMe);
+            }
+        }
     }
 }
