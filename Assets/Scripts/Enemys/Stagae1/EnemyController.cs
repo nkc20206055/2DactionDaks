@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     float SaveTime;//
     bool Onlyonce;//一回きり動く
     EcColliderController ECC;//ECCコンポーネントを入れるよう
+    Renderer targetRenderer; // 判定したいオブジェクトのrendererへの参照
 
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;//Animator保存用
@@ -157,37 +158,40 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         counterHetSwicth = false;
         anim = GetComponent<Animator>();
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
+        targetRenderer = GetComponent<Renderer>();
     }
     // Update is called once per frame
     void Update()
     {
-        
-        //
-        //現在のステートを呼び出す
-        switch (state){
-
-            case STATE.normal://通常時
-                Normal();
-                break;
-            case STATE.move://歩く
-                Move();
-                break;
-            case STATE.attack://攻撃する
-                Attack();
-                break;
-            case STATE.counterMe://カウンターを食らったとき
-                Counter();
-                break;
-            case STATE.damage://ダメージ
-                Damage();
-                break;
-        }
-
-        //ステートが変わったとき
-        if (state != saveState)
+        if (targetRenderer.isVisible) //カメラ内なら動く
         {
-            //次のステートに切り替わる
-            state = saveState;
+            //
+            //現在のステートを呼び出す
+            switch (state) {
+
+                case STATE.normal://通常時
+                    Normal();
+                    break;
+                case STATE.move://歩く
+                    Move();
+                    break;
+                case STATE.attack://攻撃する
+                    Attack();
+                    break;
+                case STATE.counterMe://カウンターを食らったとき
+                    Counter();
+                    break;
+                case STATE.damage://ダメージ
+                    Damage();
+                    break;
+            }
+
+            //ステートが変わったとき
+            if (state != saveState)
+            {
+                //次のステートに切り替わる
+                state = saveState;
+            }
         }
         
     }

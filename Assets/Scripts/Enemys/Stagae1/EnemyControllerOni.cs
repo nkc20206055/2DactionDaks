@@ -15,6 +15,9 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     public float Maxattacktime;//攻撃するまでの時間
     //public float actionTime;//次の行動にうつる時間
 
+    Renderer targetRenderer; // 判定したいオブジェクトのrendererへの参照
+
+
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;//Animator保存用
     private Vector3 savePos, savePlayerPos;
@@ -179,6 +182,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         attackTime = 0;
         anim = GetComponent<Animator>();
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
+        targetRenderer = GetComponent<Renderer>();
         guardSwicth = true;
         counterHetSwicth = false;
     }
@@ -186,35 +190,38 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     // Update is called once per frame
     void Update()
     {
-        //現在のステートを呼び出す
-        switch (state)
+        if (targetRenderer.isVisible)//カメラ内なら動く
         {
+            //現在のステートを呼び出す
+            switch (state)
+            {
 
-            case STATE.normal://通常時
-                Normal();
-                break;
-            case STATE.move://歩く
-                Move();
-                break;
-            case STATE.attack://攻撃する
-                Attack();
-                break;
-            case STATE.guard://防御する
-                Guard();
-                break;
-            case STATE.counterMe://カウンターを食らったとき
-                Counter();
-                break;
-            case STATE.damage://ダメージ
-                Damage();
-                break;
-        }
+                case STATE.normal://通常時
+                    Normal();
+                    break;
+                case STATE.move://歩く
+                    Move();
+                    break;
+                case STATE.attack://攻撃する
+                    Attack();
+                    break;
+                case STATE.guard://防御する
+                    Guard();
+                    break;
+                case STATE.counterMe://カウンターを食らったとき
+                    Counter();
+                    break;
+                case STATE.damage://ダメージ
+                    Damage();
+                    break;
+            }
 
-        //ステートが変わったとき
-        if (state != saveState)
-        {
-            //次のステートに切り替わる
-            state = saveState;
+            //ステートが変わったとき
+            if (state != saveState)
+            {
+                //次のステートに切り替わる
+                state = saveState;
+            }
         }
     }
 

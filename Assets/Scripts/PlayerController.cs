@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     {
 
         //ˆÚ“®§ŒÀ@//ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
-        //this.MovingRestrictions();
+        this.MovingRestrictions();
 
         //ˆÚ“®
         InputVec = Input.GetAxisRaw("Horizontal");
