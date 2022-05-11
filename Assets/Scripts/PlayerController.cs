@@ -28,8 +28,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 playerPos;
     //private readonly float playerPosXClamp = 15.0f;
     //private readonly float playerPosYClamp = 15.0f;
-    public float playerPosXClamp = 15.0f;
-    public float playerPosYClamp = 15.0f;
+    public float playerPosXClamp = 15.0f;//âEë§
+    public float playerPosYClamp = 15.0f;//è„ë§
+    public float MinsplayerPosXClamp;//ç∂ë§
+    public float MinsplayerPosYClamp;//â∫ë§
 
     // Start is called before the first frame update
     void Start()
@@ -156,8 +158,11 @@ public class PlayerController : MonoBehaviour
 
         //playerPosïœêîÇÃxÇ∆yÇ…êßå¿ÇµÇΩílÇì¸ÇÍÇÈ
         //playerPos.xÇ∆Ç¢Ç§ílÇ-playerPosXClampÅ`playerPosXClampÇÃä‘Ç…é˚ÇﬂÇÈ
-        this.playerPos.x = Mathf.Clamp(this.playerPos.x, -this.playerPosXClamp, this.playerPosXClamp);
-        this.playerPos.y = Mathf.Clamp(this.playerPos.y, -this.playerPosYClamp, this.playerPosYClamp);
+        //this.playerPos.x = Mathf.Clamp(this.playerPos.x, -this.playerPosXClamp, this.playerPosXClamp);
+        //this.playerPos.y = Mathf.Clamp(this.playerPos.y, -this.playerPosYClamp, this.playerPosYClamp);
+
+        this.playerPos.x = Mathf.Clamp(this.playerPos.x, this.MinsplayerPosXClamp, this.playerPosXClamp);
+        this.playerPos.y = Mathf.Clamp(this.playerPos.y, this.MinsplayerPosYClamp, this.playerPosYClamp);
 
         transform.position = new Vector2(this.playerPos.x, this.playerPos.y);
     }
