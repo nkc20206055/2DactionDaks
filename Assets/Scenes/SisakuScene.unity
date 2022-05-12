@@ -1929,6 +1929,14 @@ PrefabInstance:
       propertyPath: hpui
       value: 
       objectReference: {fileID: 667086412}
+    - target: {fileID: 3658527049209789395, guid: 20cb30b6a418cf5439c519e9378b65a1, type: 3}
+      propertyPath: MinsplayerPosXClamp
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658527049209789395, guid: 20cb30b6a418cf5439c519e9378b65a1, type: 3}
+      propertyPath: MinsplayerPosYClamp
+      value: -15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20cb30b6a418cf5439c519e9378b65a1, type: 3}
 --- !u!1001 &4137390773707246373
@@ -2154,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8879994436838873718, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}

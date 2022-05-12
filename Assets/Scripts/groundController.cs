@@ -231,7 +231,7 @@ public class groundController : MonoBehaviour
                     Debug.Log("軽ダメージ");
                     damageHetSwcith = true;
                     damageSwicth = true;
-                    deletehp = 2;
+                    deletehp = 1;
                     damageHetOn = true;
                 }
 
@@ -254,7 +254,7 @@ public class groundController : MonoBehaviour
                     Debug.Log("重ダメージ");
                     damageHetSwcith = true;
                     damageSwicth = true;
-                    deletehp = 3;
+                    deletehp = 2;
                     damageHetOn = true;
                 }
             }
