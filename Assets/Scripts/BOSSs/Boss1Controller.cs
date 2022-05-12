@@ -9,19 +9,26 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     private STATE saveState;//enumを変えるとき変化するほうを保存する変数
 
     public float MaxHP;//最大体力
-    public float moveSpeed;//移動スピード
+    public float moveSpeed,JumpSpeed;//移動スピード,ジャンプスピード
     public float nPosS;//攻撃を発生する場合のプレイヤーとの距離
     public float MaxStopTime;//Normal時に考える時間
     public float MaxXposition, MMaxXposition;//ジャンプ用　左側にジャンプする位置、右側にジャンプする位置
+    
+    float MaxjumpPos;
+    public float aa;
 
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;
     private Vector3 savePos, savePlayerPos;
+    private Vector3 Bpos,SaveBpos;
     private int Attackcount, Maxattackcount;//攻撃回数を記録する
     private int Raction;
     private float hp;//体力
+    private float Jpos;
     private float Savedirection,direction;//移動時の向き保存用,向きの値を入れる用
     private float stopTime;//止まっている間の計る時間
+    private bool JumpStratSwicth,jumpSwicth;//ジャンプができるがどうか
+
     void StartA()//初めに動くアニメーション
     {
         anim.SetBool("startS", true);
@@ -29,6 +36,8 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     void Normal()//通常
     {
         anim.SetBool("move", false);
+        anim.SetBool("jump", false);
+        anim.SetFloat("jumpN", 0);
         anim.SetBool("startS", false);
 
 
@@ -38,7 +47,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
             //changeState(STATE.move);
             changeState(STATE.jump);
             stopTime = 0;
-            Debug.Log(stopTime);
+            //Debug.Log(stopTime);
         }
         else
         {
@@ -89,6 +98,58 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     void Jump()//ジャンプ
     {
         anim.SetBool("jump", true);
+        if (JumpStratSwicth == true)
+        {
+            
+            Bpos = transform.position;//自身の座標を入れる
+            //Vector3 Bpos = transform.position;//自身の座標を入れる
+            //if (MaxXposition<=Bpos.x&&MMaxXposition>=Bpos.x)
+            //{
+            //    Debug.Log("ジャンプしない");
+            //}
+            //else
+            //{
+            //    Debug.Log("ジャンプする");
+            //}
+
+            //int i = Random.Range(0,2);
+            MaxjumpPos = Bpos.x - MMaxXposition*-1;
+            //Debug.Log(MaxjumpPos);
+            //MaxjumpPos = Mathf.Floor(MaxjumpPos)/2;//切り捨てして半分にする
+            MaxjumpPos = MaxjumpPos/2;//切り捨てして半分にする
+            Debug.Log(MaxjumpPos);
+            JumpStratSwicth = false;
+        }
+        if (jumpSwicth==true) {
+            //左にジャンプ
+            if (MMaxXposition <= Bpos.x)
+            {
+                
+                Bpos = transform.position;//自身の座標を入れる
+                Vector3 i = new Vector3();
+                if (MaxjumpPos >= Bpos.x)//下がる
+                {
+                    //Debug.Log("下がってる");
+                    anim.SetFloat("jumpN",2);
+                    aa += 20f * Time.deltaTime;
+                    i.y = -1 * aa * Time.deltaTime;
+                }
+                else //上がる
+                {
+                    //Debug.Log("上がってる");
+                    anim.SetFloat("jumpN", 1);
+                    aa -= 20f * Time.deltaTime;
+                    i.y = 1 * aa * Time.deltaTime;
+                }
+                i.x = -1 * JumpSpeed * Time.deltaTime;
+                transform.position += i;
+            }
+            else
+            {
+                anim.SetFloat("jumpN", 3);
+                transform.position = new Vector3(transform.position.x,SaveBpos.y,transform.position.z);
+            }
+        }
     }
     void Lightattack()//弱攻撃
     {
@@ -110,9 +171,16 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     {
 
     }
-    public void jumpNamber(int i)//アニメーションのjumpNを変更する
+    public void jumpNamber()//アニメーションのjumpNを変更する
     {
-        anim.SetFloat("jumpN", i);
+        if (jumpSwicth==false)
+        {
+            jumpSwicth = true;
+        }
+        else
+        {
+            jumpSwicth = false;
+        }
     }
     private void changeState(STATE _state)//ステートを切り替える
     {
@@ -122,9 +190,11 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     // Start is called before the first frame update
     void Start()
     {
+        SaveBpos = transform.position;
         hp = MaxHP;
         Maxattackcount = 2;//最初は2回
         anim = GetComponent<Animator>();
+        JumpStratSwicth = true;
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         stopTime = MaxStopTime;//最初だけすぐに動けるようにする
     }
