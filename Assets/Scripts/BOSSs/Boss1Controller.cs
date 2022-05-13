@@ -21,14 +21,19 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     private Animator anim;
     private Vector3 savePos, savePlayerPos;
     private Vector3 Bpos,SaveBpos;
-    private int Attackcount, Maxattackcount;//攻撃回数を記録する
+    private int Attackcount, Maxattackcount;//強攻撃までの攻撃回数を記録する
+    private int attackNO, attackNcount;//攻撃する回数,回数の記録
     private int Raction,jumpN;
-    private float hp;//体力
+    private int counterCount,MaxcounterCount;//カウンターされた回数の記録、最大でカウンターされていい回数
+    public float hp;//体力
     private float Jpos;
     private float Savedirection,direction;//移動時の向き保存用,向きの値を入れる用
     private float stopTime;//止まっている間の計る時間
     private bool JumpStratSwicth,jumpSwicth;//ジャンプができるがどうか
     private bool attackSwicth;//攻撃開始のスイッチ
+    private bool attackNumberS, directionSwicth;
+    private bool counterHetSwicth,counterOneSwicth;//カウンターが当たったら動くbool型
+    private bool DownSwcith,Downdamgemode;//ダウンした時に1回だけ動く
 
     void StartA()//初めに動くアニメーション
     {
@@ -37,10 +42,19 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     void Normal()//通常
     {
         jumpN = 0;
+        attackNumberS = true;
+        directionSwicth = true;
+        counterHetSwicth = false;
+        DownSwcith = true;
+        attackNO = 0;
+        attackNcount = 0;
         anim.SetBool("move", false);
         anim.SetBool("jump", false);
         anim.SetFloat("jumpN", 0);
         anim.SetBool("lightattack", false);
+        anim.SetBool("heavyattack", false);
+        anim.SetBool("counter", false);
+        anim.SetBool("down", false);
         anim.SetBool("startS", false);
 
 
@@ -62,6 +76,19 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     void Move()//移動
     {
         //Debug.Log("移動");
+        if (attackNumberS==true)
+        {
+            attackNO = Random.Range(1, 4);
+            if (attackNO==2||attackNO==3)//2回攻撃をする
+            {
+                attackNO = 2;
+            }else if (attackNO==1)//1回攻撃をする
+            {
+                attackNO = 3;
+            }
+            Debug.Log(attackNO+"回攻撃をする");
+            attackNumberS = false;
+        }
         savePlayerPos = playerG.transform.position;//プレイヤーの位置を代入
         savePlayerPos = transform.position - savePlayerPos;//プレイヤーの位置とこれの位置を引く
 
@@ -124,21 +151,21 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
 
             if (Raction % 2 == 0)
             {
-                Debug.Log("偶数");
+                //Debug.Log("偶数");
                 //右ジャンプ
                 jumpN = 1;
                 MaxjumpPos = (Bpos.x + MaxXposition) / 2f;
-                Debug.Log(MaxjumpPos);
+                //Debug.Log(MaxjumpPos);
                 Vector3 s = transform.localScale;
                 transform.localScale = new Vector3(-1f, s.y, s.z);
             }
             else
             {
-                Debug.Log("奇数");
+                //Debug.Log("奇数");
                 //左ジャンプ
                 jumpN = -1;
                 MaxjumpPos = (Bpos.x + MMaxXposition) / 2f;
-                Debug.Log(MaxjumpPos);
+                //Debug.Log(MaxjumpPos);
                 Vector3 s = transform.localScale;
                 transform.localScale = new Vector3(1f, s.y, s.z);
             }
@@ -214,14 +241,19 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         if(attackSwicth==true)
         {
             Debug.Log("弱攻撃");
+            attackNcount++;
             //Raction = Random.Range(1, 11);
-            if (Raction==1)
+            if (directionSwicth==true) //次にジャンプする方向を決める(一回きり)
             {
-                Raction = 2;
-            }
-            else if (Raction == 2)
-            {
-                Raction = 1;
+                if (Raction == 1)//右
+                {
+                    Raction = 2;
+                }
+                else if (Raction == 2)//左
+                {
+                    Raction = 1;
+                }
+                directionSwicth = false;
             }
             JumpStratSwicth = true;
             attackSwicth = false;
@@ -232,31 +264,83 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         if (attackSwicth == true)
         {
             Debug.Log("強攻撃");
-            if (Raction == 1)
+            attackNcount++;
+            if (directionSwicth == true)//次にジャンプする方向を決める(一回きり)
             {
-                Raction = 2;
-            }
-            else if (Raction == 2)
-            {
-                Raction = 1;
+                if (Raction == 1)//右
+                {
+                    Raction = 2;
+                }
+                else if (Raction == 2)//左
+                {
+                    Raction = 1;
+                }
+                directionSwicth = false;
             }
             Attackcount = 0;
-            Maxattackcount = 3;
+            Maxattackcount = Random.Range(2,4);
             JumpStratSwicth = true;
             attackSwicth = false;
         }
     }
+    void attackMigration()
+    {
+        if (attackNO<=attackNcount)
+        {
+            changeState(STATE.jump);
+        }else if (attackNO > attackNcount)
+        {
+            changeState(STATE.move);
+            anim.SetBool("move", true);
+            anim.SetBool("lightattack", false);
+            anim.SetBool("heavyattack", false);
+        }
+    }
     void Counter()//カウンターをくらったとき
     {
-
+        if (counterOneSwicth==true) {
+            counterCount++;
+            anim.SetBool("counter", true);
+            anim.SetBool("heavyattack", false);
+            counterOneSwicth = false;
+        }
     }
     void Down()//ダウン状態
     {
-
+        if (DownSwcith==true) {
+            counterCount=0;
+            MaxcounterCount++;
+            anim.SetBool("down", true);
+            anim.SetBool("heavyattack", false);
+            DownSwcith = false;
+        }
+    }
+    void CounterBool()//animationで攻撃中にカウンターされたら起動する用
+    {
+        if (counterHetSwicth == false)//起動していなかったら
+        {
+            counterHetSwicth = true;
+        }
+        else if (counterHetSwicth == true)//起動していたら
+        {
+            counterHetSwicth = false;
+        }
     }
     public void EnemyDamage(int h)//ダメージを受けた時※インターフェース
     {
+        if (Downdamgemode==true)
+        {
+            hp -= h * 1.5f;
+        }
+        else
+        {
+            hp -= h;
+        }
 
+        if (hp<=0)//死亡
+        {
+            Debug.Log("死亡");
+        }
     }
     public void jumpNamber()//アニメーションのjumpNを変更する
     {
@@ -281,9 +365,15 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         hp = MaxHP;
         Maxattackcount = 2;//最初は2回
         Raction = 2;
+        attackNO = 0;
+        attackNcount = 0;
+        MaxcounterCount = 2;
+        counterCount = 0;
         anim = GetComponent<Animator>();
         JumpStratSwicth = true;
+        counterHetSwicth = false;
         attackSwicth = true;
+        DownSwcith = true;
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         stopTime = MaxStopTime;//最初だけすぐに動けるようにする
     }
@@ -294,7 +384,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         //現在のステートを呼び出す
         switch (state)
         {
-            case STATE.startA://
+            case STATE.startA://初めに動く
                 StartA();
                 break;
             case STATE.normal://通常時
@@ -325,6 +415,26 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         {
             //次のステートに切り替わる
             state = saveState;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "playercounter")
+        {
+            if (counterHetSwicth == true)
+            {
+                if (MaxcounterCount<=counterCount) {
+                    Downdamgemode = true;
+                    changeState(STATE.down);
+
+                } else if (MaxcounterCount > counterCount) {
+                    //Debug.Log("ヒット");
+                    counterOneSwicth = true;
+                    changeState(STATE.counterH);
+                }
+            }
+
         }
     }
 }

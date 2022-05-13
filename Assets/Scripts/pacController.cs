@@ -94,5 +94,11 @@ public class pacController : MonoBehaviour
             damageV.EnemyDamage(Edamage);
             //Debug.Log(damageV);
         }
+
+        if (collision.gameObject.tag == "boss")
+        {
+            EnemyDamageController damageV = collision.GetComponent<EnemyDamageController>();
+            damageV.EnemyDamage(Edamage);
+        }
     }
 }

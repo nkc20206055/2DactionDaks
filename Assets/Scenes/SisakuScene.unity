@@ -2112,6 +2112,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8879994436250295419, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
+      propertyPath: counterHetSwicth
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8879994436838873717, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
       propertyPath: m_RootOrder
       value: 3

@@ -205,10 +205,11 @@ public class groundController : MonoBehaviour
             counterSwicth = true;
             if (counterSwicth == true)
             {
+                Debug.Log(ECC.counterHetSwicth);
                 if (ECC.counterHetSwicth == true)
                 {
-                    Debug.Log("当たった");
-
+                    
+                    Debug.Log("当たった2");
                     //AS.PlayOneShot(Se1);//SEを鳴らす
 
                     gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する

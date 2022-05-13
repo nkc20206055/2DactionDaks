@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 656502259}
   m_Layer: 0
   m_Name: Boss1
-  m_TagString: Untagged
+  m_TagString: boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4864da96f8e8a5f4aaf1f62cbce84b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 0
+  MaxHP: 100
   moveSpeed: 3
   JumpSpeed: 12
   nPosS: 8
@@ -425,6 +425,7 @@ MonoBehaviour:
   MaxXposition: 15
   MMaxXposition: -15
   aa: 20
+  hp: 0
 --- !u!50 &656502259
 Rigidbody2D:
   serializedVersion: 4
@@ -712,7 +713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adef08414cbe7cd439d169905c333d82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterHetSwicth: 0
+  counterHetSwicth: 1
 --- !u!61 &1397984523
 BoxCollider2D:
   m_ObjectHideFlags: 0
