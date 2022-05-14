@@ -417,10 +417,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4864da96f8e8a5f4aaf1f62cbce84b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 100
+  MaxHP: 20
   moveSpeed: 3
   JumpSpeed: 12
   nPosS: 8
+  jumpAPpos: 8
   MaxStopTime: 1
   MaxXposition: 15
   MMaxXposition: -15

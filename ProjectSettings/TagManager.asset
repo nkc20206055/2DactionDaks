@@ -12,6 +12,7 @@ TagManager:
   - enemyheavyattack
   - counterHet
   - boss
+  - bossjump
   layers:
   - Default
   - TransparentFX

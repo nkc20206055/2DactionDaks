@@ -4,26 +4,27 @@ using UnityEngine;
 
 public class Boss1Controller : MonoBehaviour, EnemyDamageController
 {
-    private enum STATE {startA,normal,move,jump,lightattack,heavyattack,counterH,down };
+    private enum STATE {startA,normal,move,jump,lightattack,heavyattack,counterH,down,change,jumpattack};
     private STATE state=STATE.startA;//enumを入れる
     private STATE saveState;//enumを変えるとき変化するほうを保存する変数
 
     public float MaxHP;//最大体力
     public float moveSpeed,JumpSpeed;//移動スピード,ジャンプスピード
-    public float nPosS;//攻撃を発生する場合のプレイヤーとの距離
+    public float nPosS,jumpAPpos;//攻撃を発生する場合のプレイヤーとの距離,ジャンプ攻撃を発生する場合のプレイヤーとの距離
     public float MaxStopTime;//Normal時に考える時間
     public float MaxXposition, MMaxXposition;//ジャンプ用　左側にジャンプする位置、右側にジャンプする位置
     
     float MaxjumpPos;
     public float aa;
 
+    private GameObject MI;//自身のオブジェクト
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;
     private Vector3 savePos, savePlayerPos;
     private Vector3 Bpos,SaveBpos;
     private int Attackcount, Maxattackcount;//強攻撃までの攻撃回数を記録する
     private int attackNO, attackNcount;//攻撃する回数,回数の記録
-    private int Raction,jumpN;
+    private int Raction,jumpN,jumpattackR;
     private int counterCount,MaxcounterCount;//カウンターされた回数の記録、最大でカウンターされていい回数
     public float hp;//体力
     private float Jpos;
@@ -34,6 +35,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     private bool attackNumberS, directionSwicth;
     private bool counterHetSwicth,counterOneSwicth;//カウンターが当たったら動くbool型
     private bool DownSwcith,Downdamgemode;//ダウンした時に1回だけ動く
+    private bool changeSwicth, SchangeSwicth, CjumpSwcith;//
 
     void StartA()//初めに動くアニメーション
     {
@@ -41,7 +43,9 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     }
     void Normal()//通常
     {
+        gameObject.tag = "boss";
         jumpN = 0;
+        jumpattackR = 0;
         attackNumberS = true;
         directionSwicth = true;
         counterHetSwicth = false;
@@ -55,8 +59,9 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         anim.SetBool("heavyattack", false);
         anim.SetBool("counter", false);
         anim.SetBool("down", false);
+        //anim.SetBool("change", false);
         anim.SetBool("startS", false);
-
+        anim.SetBool("jumpattack", false);
 
         if (stopTime>=MaxStopTime)//次の行動
         {
@@ -66,7 +71,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
             //changeState(STATE.jump);
             //JumpStratSwicth = true;
             stopTime = 0;
-            //Debug.Log(stopTime);
+            Debug.Log(stopTime);
         }
         else
         {
@@ -79,6 +84,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         if (attackNumberS==true)
         {
             attackNO = Random.Range(1, 4);
+            jumpattackR = Random.Range(1, 7);//通常ジャンプかジャンプ攻撃か
             if (attackNO==2||attackNO==3)//2回攻撃をする
             {
                 attackNO = 2;
@@ -134,6 +140,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         anim.SetBool("jump", true);
         if (JumpStratSwicth == true)
         {
+            gameObject.tag = "bossjump";
             anim.SetBool("lightattack", false);
             anim.SetBool("heavyattack", false);
             Bpos = transform.position;
@@ -287,13 +294,57 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     {
         if (attackNO<=attackNcount)
         {
-            changeState(STATE.jump);
-        }else if (attackNO > attackNcount)
+            if (CjumpSwcith==true) {
+                Debug.Log("ジャンプ");
+                if (jumpattackR <= 4)
+                {
+                    savePlayerPos = playerG.transform.position;//プレイヤーの位置を代入
+                    Debug.Log("ジャンプアタック");
+                    if (savePlayerPos.x <= jumpAPpos && savePlayerPos.x >= -jumpAPpos)//プレイヤーが範囲内に入ったら
+                    {
+                        changeState(STATE.jump);
+                    }
+                    else
+                    {
+                        changeState(STATE.jumpattack);
+                    }
+                }
+                else if (jumpattackR > 4)
+                {
+                    changeState(STATE.jump);
+                }
+            }
+            else
+            {
+                changeState(STATE.jump);
+            }
+        }
+        else if (attackNO > attackNcount)
         {
             changeState(STATE.move);
             anim.SetBool("move", true);
             anim.SetBool("lightattack", false);
             anim.SetBool("heavyattack", false);
+        }
+    }
+    void jumpattack()
+    {
+        anim.SetBool("jumpattack", true);
+        if (JumpStratSwicth==true)
+        {
+            savePlayerPos = playerG.transform.position;//プレイヤーの位置を代入
+            if (savePlayerPos.x <= jumpAPpos && savePlayerPos.x >= -jumpAPpos)//プレイヤーが範囲内に入ったら
+            {
+                changeState(STATE.jump);
+                anim.SetBool("jumpattack", false);
+                JumpStratSwicth = false;
+            }
+            else
+            {
+
+            }
+
+            JumpStratSwicth = false;
         }
     }
     void Counter()//カウンターをくらったとき
@@ -313,6 +364,32 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
             anim.SetBool("down", true);
             anim.SetBool("heavyattack", false);
             DownSwcith = false;
+        }
+    }
+    void Change()//状態変化
+    {
+        if (changeSwicth == true)
+        {
+            Debug.Log("半分");
+            gameObject.tag = "bossjump";
+            anim.SetBool("change", true);
+            anim.SetBool("startS", true);
+            jumpN = 0;
+            attackNumberS = true;
+            directionSwicth = true;
+            counterHetSwicth = false;
+            DownSwcith = true;
+            attackNO = 0;
+            attackNcount = 0;
+            CjumpSwcith = true;
+            anim.SetBool("move", false);
+            anim.SetBool("jump", false);
+            anim.SetFloat("jumpN", 0);
+            anim.SetBool("lightattack", false);
+            anim.SetBool("heavyattack", false);
+            anim.SetBool("counter", false);
+            anim.SetBool("down", false);
+            changeSwicth = false;
         }
     }
     void CounterBool()//animationで攻撃中にカウンターされたら起動する用
@@ -337,10 +414,20 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
             hp -= h;
         }
 
+        if (MaxHP/2>hp)//HPが半分になったら
+        {
+            if (SchangeSwicth==true) {
+                changeState(STATE.change);
+                SchangeSwicth = false;
+            }
+        }
         if (hp<=0)//死亡
         {
             Debug.Log("死亡");
         }
+        
+
+        
     }
     public void jumpNamber()//アニメーションのjumpNを変更する
     {
@@ -374,8 +461,11 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         counterHetSwicth = false;
         attackSwicth = true;
         DownSwcith = true;
+        changeSwicth = true;
+        SchangeSwicth = true;
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         stopTime = MaxStopTime;//最初だけすぐに動けるようにする
+
     }
 
     // Update is called once per frame
@@ -402,11 +492,17 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
             case STATE.heavyattack://強攻撃する
                 Heavyattack();
                 break;
+            case STATE.jumpattack://ジャンプ攻撃する
+                jumpattack();
+                break;
             case STATE.counterH://カウンターを食らったとき
                 Counter();
                 break;
             case STATE.down://ダウンしたとき
                 Down();
+                break;
+            case STATE.change://ダウンしたとき
+                Change();
                 break;
         }
 
