@@ -75,23 +75,25 @@ public class groundController : MonoBehaviour
                 damageHetSwcith = false;
                 gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
             }
+         
+                cTime += 1 * Time.deltaTime;
+                if (cTime < damageTime)//点滅させる
+                {
+                    if (gadeSwicth == false)
+                    {
+                        float level = Mathf.Abs(Mathf.Sin(Time.time * 10));//Mathf.Absは絶対値、Mathf.SinはSin(サイン)が出される
+                        sR.color = new Color(1f, 1f, 1f, level);
+                    }
 
-
-            cTime += 1 * Time.deltaTime;
-            if (cTime < damageTime)//点滅させる
-            {
-                float level = Mathf.Abs(Mathf.Sin(Time.time * 10));//Mathf.Absは絶対値、Mathf.SinはSin(サイン)が出される
-                sR.color = new Color(1f, 1f, 1f, level);
-
-            }
-            else if (cTime >= damageTime)
-            {
-                sR.color = new Color(255, 255, 255, 255);
-                gameObject.layer = LayerMask.NameToLayer("Default");//レイヤーマスクを戻す
-                damageSwicth = false;
-                damageHetOn = false;
-                cTime = 0;
-            }
+                }
+                else if (cTime >= damageTime)
+                {
+                    sR.color = new Color(255, 255, 255, 255);
+                    gameObject.layer = LayerMask.NameToLayer("Default");//レイヤーマスクを戻す
+                    damageSwicth = false;
+                    damageHetOn = false;
+                    cTime = 0;
+                }
         }
     }
     // Start is called before the first frame update
@@ -242,13 +244,17 @@ public class groundController : MonoBehaviour
             {
                 if (gadeSwicth == true)//ガードした場合
                 {
-                    GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
-                    s.SetActive(false);
-                    hp--;
+                    //GameObject s = hpui.transform.GetChild(hp - 1).gameObject;
+                    //s.SetActive(false);
+                    //hp--;
+                    damageHetSwcith = true;
+                    damageSwicth = true;
+                    deletehp = 1;
+                    damageHetOn = true;
                     slider.value -= 20;
                     sliderS = slider.value;
-                    //Debug.Log(hp);
-                    deletehp = 0;
+                    ////Debug.Log(hp);
+                    //deletehp = 0;
                 }
                 else //ガードしなかった場合
                 {
