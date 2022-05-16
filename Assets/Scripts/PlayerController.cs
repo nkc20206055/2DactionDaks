@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    GameObject SM;
+    stageManagerC SMC;
+
     public float MoveSpeed;   //ˆÚ“®ƒXƒs[ƒh
 
     Vector3 SaveVec;   //ˆÚ“®‚È‚Ç‚ğ•Û‘¶‚·‚é
@@ -37,6 +40,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         normalSwicth = false;
+        SM = GameObject.FindWithTag("stageManager");
+        SMC = SM.GetComponent<stageManagerC>();
         Rd2D = gameObject.GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
@@ -48,85 +53,89 @@ public class PlayerController : MonoBehaviour
     // Update is called sonce per frame
     void Update()
     {
+        if (SMC.pauseSwicth==false) {
+            //ˆÚ“®§ŒÀ@//ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
+            this.MovingRestrictions();
 
-        //ˆÚ“®§ŒÀ@//ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
-        this.MovingRestrictions();
-
-        //ˆÚ“®
-        InputVec = Input.GetAxisRaw("Horizontal");
-        if (InputVec != 0)//ƒvƒŒƒCƒ„[‚ÌŒü‚«
-        {
-            Vector3 SavelocalScale = transform.localScale;//Œ»İ‚ÌŒü‚«‚ğ•Û‘¶
-            transform.localScale = new Vector3(/*SavelocalScale.x **/ InputVec, SavelocalScale.y, SavelocalScale.z);
-        }
-        if (InputVec > 0)
-        {
-            anim.SetBool("run", true);
-        }
-        else if (InputVec < 0)
-        {
-            anim.SetBool("run", true);
-        }
-        else
-        {
-            anim.SetBool("run", false);
-        }
-        {
-            //UŒ‚
-            if (Input.GetMouseButton(0))//UŒ‚‚ğ’™‚ß‚é
+            //ˆÚ“®
+            InputVec = Input.GetAxisRaw("Horizontal");
+            if (InputVec != 0)//ƒvƒŒƒCƒ„[‚ÌŒü‚«
             {
-                if (attackTime < MaxattackTime)
+                Vector3 SavelocalScale = transform.localScale;//Œ»İ‚ÌŒü‚«‚ğ•Û‘¶
+                transform.localScale = new Vector3(/*SavelocalScale.x **/ InputVec, SavelocalScale.y, SavelocalScale.z);
+            }
+            if (InputVec > 0)
+            {
+                anim.SetBool("run", true);
+            }
+            else if (InputVec < 0)
+            {
+                anim.SetBool("run", true);
+            }
+            else
+            {
+                anim.SetBool("run", false);
+            }
+            {
+                //UŒ‚
+                if (Input.GetMouseButton(0))//UŒ‚‚ğ’™‚ß‚é
+                {
+                    if (attackTime < MaxattackTime)
+                    {
+                        attackTime += 1 * Time.deltaTime;
+                        chargeSlider.value += 1 * Time.deltaTime;
+                        //Debug.Log(attackTime);
+                    }
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    chargeSlider.value = 0;
+                    if (attackTime >= MaxattackTime)//‹­UŒ‚
+                    {
+                        anim.SetBool("hevayAttack", true);
+                        isAttack = true;
+                        pacC.heavyattackSwicth = true;
+                        StartCoroutine("WaitForAttack");
+                        attackTime = 0;
+                        attackAutTime = 0.6f;//–ß‚é‚Ü‚Å‚ÌŠÔ(‘‚«Š·‚¦‚Ä‚¢‚¢)
+                        normalSwicth = true;
+                    }
+                    else if (attackTime < MaxattackTime)//ãUŒ‚
+                    {
+                        anim.SetBool("lightAttack", true);
+                        isAttack = true;
+                        pacC.rightattackSwicth = true;
+                        StartCoroutine("WaitForAttack");
+                        attackTime = 0;
+                        attackAutTime = 0.5f;//–ß‚é‚Ü‚Å‚ÌŠÔ(‘‚«Š·‚¦‚Ä‚¢‚¢)
+                        normalSwicth = true;
+                    }
+                }
+                else if (normalSwicth == true)//UŒ‚‚ğ–ß‚·
                 {
                     attackTime += 1 * Time.deltaTime;
-                    chargeSlider.value += 1 * Time.deltaTime;
-                    //Debug.Log(attackTime);
-                }
-            }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                chargeSlider.value = 0;
-                if (attackTime >= MaxattackTime)//‹­UŒ‚
-                {
-                    anim.SetBool("hevayAttack", true);
-                    isAttack = true;
-                    pacC.heavyattackSwicth = true;
-                    StartCoroutine("WaitForAttack");
-                    attackTime = 0;
-                    attackAutTime = 0.6f;//–ß‚é‚Ü‚Å‚ÌŠÔ(‘‚«Š·‚¦‚Ä‚¢‚¢)
-                    normalSwicth = true;
-                }
-                else if (attackTime < MaxattackTime)//ãUŒ‚
-                {
-                    anim.SetBool("lightAttack", true);
-                    isAttack = true;
-                    pacC.rightattackSwicth = true;
-                    StartCoroutine("WaitForAttack");
-                    attackTime = 0;
-                    attackAutTime = 0.5f;//–ß‚é‚Ü‚Å‚ÌŠÔ(‘‚«Š·‚¦‚Ä‚¢‚¢)
-                    normalSwicth = true;
-                }
-            }
-            else if (normalSwicth == true)//UŒ‚‚ğ–ß‚·
-            {
-                attackTime += 1 * Time.deltaTime;
-                if (attackTime >= attackAutTime)
-                {
+                    if (attackTime >= attackAutTime)
+                    {
 
-                    anim.SetBool("lightAttack", false);
-                    anim.SetBool("hevayAttack", false);
-                    attackTime = 0;
-                    normalSwicth = false;
+                        anim.SetBool("lightAttack", false);
+                        anim.SetBool("hevayAttack", false);
+                        attackTime = 0;
+                        normalSwicth = false;
+                    }
                 }
-            }
-        }//ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
+            }//ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
+        }
 
     }
 
 
     void FixedUpdate()
     {
-        SaveVec.x = MoveSpeed * InputVec * Time.deltaTime;
-        transform.position += SaveVec;
+        if (SMC.pauseSwicth == false)
+        {
+            SaveVec.x = MoveSpeed * InputVec * Time.deltaTime;
+            transform.position += SaveVec;
+        }
         //UŒ‚
         //if(Input.GetMouseButtonDown(0))
         //{           

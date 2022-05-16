@@ -8,6 +8,9 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     private STATE state=STATE.startA;//enumを入れる
     private STATE saveState;//enumを変えるとき変化するほうを保存する変数
 
+    GameObject SM;
+    stageManagerC SMC;
+
     [SerializeField] public GameObject attackC;
     [SerializeField] public GameObject bulletObject; 
     public float MaxHP;//最大体力
@@ -594,6 +597,8 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     // Start is called before the first frame update
     void Start()
     {
+        SM = GameObject.FindWithTag("stageManager");
+        SMC = SM.GetComponent<stageManagerC>();
         SaveBpos = transform.position;
         hp = MaxHP;
         Maxattackcount = 2;//最初は2回
@@ -619,49 +624,52 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     // Update is called once per frame
     void Update()
     {
-        //現在のステートを呼び出す
-        switch (state)
+        if (SMC.pauseSwicth == false)
         {
-            case STATE.startA://初めに動く
-                StartA();
-                break;
-            case STATE.normal://通常時
-                Normal();
-                break;
-            case STATE.move://歩く
-                Move();
-                break;
-            case STATE.jump://歩く
-                Jump();
-                break;
-            case STATE.lightattack://弱攻撃する
-                Lightattack();
-                break;
-            case STATE.heavyattack://強攻撃する
-                Heavyattack();
-                break;
-            case STATE.jumpattack://ジャンプ攻撃する
-                jumpattack();
-                break;
-            case STATE.counterH://カウンターを食らったとき
-                Counter();
-                break;
-            case STATE.down://ダウンしたとき
-                Down();
-                break;
-            case STATE.change://ダウンしたとき
-                Change();
-                break;
-            case STATE.destoy://死亡時
-                Destory();
-                break;
-        }
+            //現在のステートを呼び出す
+            switch (state)
+            {
+                case STATE.startA://初めに動く
+                    StartA();
+                    break;
+                case STATE.normal://通常時
+                    Normal();
+                    break;
+                case STATE.move://歩く
+                    Move();
+                    break;
+                case STATE.jump://歩く
+                    Jump();
+                    break;
+                case STATE.lightattack://弱攻撃する
+                    Lightattack();
+                    break;
+                case STATE.heavyattack://強攻撃する
+                    Heavyattack();
+                    break;
+                case STATE.jumpattack://ジャンプ攻撃する
+                    jumpattack();
+                    break;
+                case STATE.counterH://カウンターを食らったとき
+                    Counter();
+                    break;
+                case STATE.down://ダウンしたとき
+                    Down();
+                    break;
+                case STATE.change://ダウンしたとき
+                    Change();
+                    break;
+                case STATE.destoy://死亡時
+                    Destory();
+                    break;
+            }
 
-        //ステートが変わったとき
-        if (state != saveState)
-        {
-            //次のステートに切り替わる
-            state = saveState;
+            //ステートが変わったとき
+            if (state != saveState)
+            {
+                //次のステートに切り替わる
+                state = saveState;
+            }
         }
     }
 

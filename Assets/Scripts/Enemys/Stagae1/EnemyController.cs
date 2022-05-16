@@ -9,6 +9,9 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     private STATE state = STATE.normal;//enumのnormalを入れる
     private STATE saveState = STATE.move;//enumを変えるとき変化するほうを保存する変数
 
+    GameObject SM;
+    stageManagerC SMC;
+
     //public bool otamseimode;//お試しで動かす場合true
     public int MaxHP;//最大HP
     public float moveSpeed;//移動スピード
@@ -153,6 +156,8 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     // Start is called before the first frame update
     void Start()
     {
+        SM = GameObject.FindWithTag("stageManager");
+        SMC = SM.GetComponent<stageManagerC>();
         HP = MaxHP;
         Onlyonce = true;
         counterHetSwicth = false;
@@ -165,32 +170,36 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     {
         if (targetRenderer.isVisible) //カメラ内なら動く
         {
-            //
-            //現在のステートを呼び出す
-            switch (state) {
-
-                case STATE.normal://通常時
-                    Normal();
-                    break;
-                case STATE.move://歩く
-                    Move();
-                    break;
-                case STATE.attack://攻撃する
-                    Attack();
-                    break;
-                case STATE.counterMe://カウンターを食らったとき
-                    Counter();
-                    break;
-                case STATE.damage://ダメージ
-                    Damage();
-                    break;
-            }
-
-            //ステートが変わったとき
-            if (state != saveState)
+            if (SMC.pauseSwicth == false)
             {
-                //次のステートに切り替わる
-                state = saveState;
+                //
+                //現在のステートを呼び出す
+                switch (state)
+                {
+
+                    case STATE.normal://通常時
+                        Normal();
+                        break;
+                    case STATE.move://歩く
+                        Move();
+                        break;
+                    case STATE.attack://攻撃する
+                        Attack();
+                        break;
+                    case STATE.counterMe://カウンターを食らったとき
+                        Counter();
+                        break;
+                    case STATE.damage://ダメージ
+                        Damage();
+                        break;
+                }
+
+                //ステートが変わったとき
+                if (state != saveState)
+                {
+                    //次のステートに切り替わる
+                    state = saveState;
+                }
             }
         }
         

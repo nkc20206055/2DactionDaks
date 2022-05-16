@@ -13,6 +13,7 @@ TagManager:
   - counterHet
   - boss
   - bossjump
+  - stageManager
   layers:
   - Default
   - TransparentFX
