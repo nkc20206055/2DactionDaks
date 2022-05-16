@@ -10,6 +10,7 @@ public class groundController : MonoBehaviour
     public GameObject hpui;//HPのUIを入れる変数
     //public AudioClip Se1;//SEを鳴らすオブジェクトを入れるところ
 
+    //public MaxHp;//最大HP
     public float counterTime;//カウンターできる時間
     public float damageTime;//無敵時間
 
@@ -99,7 +100,7 @@ public class groundController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hp = 10;//最大hpの設定
+        hp = /*MaxHp*/10;//最大hpの設定
         sR = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         AS = GetComponent<AudioSource>();
