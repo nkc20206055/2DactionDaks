@@ -39,7 +39,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     private bool DownSwcith,Downdamgemode;//ダウンした時に1回だけ動く
     private bool changeSwicth, SchangeSwicth, CjumpSwcith;//
     private bool destroySwicth;
-    public  bool bulletSwicth;
+    private bool bulletSwicth;
 
     void StartA()//初めに動くアニメーション
     {
