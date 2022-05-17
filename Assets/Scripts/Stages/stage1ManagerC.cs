@@ -6,7 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class stage1ManagerC : MonoBehaviour
 {
-    
+    public void Retry()//リトライ
+    {
+
+    }
+    public void GameOver()//ゲームオーバー
+    {
+
+    }
     // Start is called before the first frame update
     void Start()
     {
