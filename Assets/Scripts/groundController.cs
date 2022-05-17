@@ -16,6 +16,7 @@ public class groundController : MonoBehaviour
     //public MaxHp;//最大HP
     public float counterTime;//カウンターできる時間
     public float damageTime;//無敵時間
+    public bool animationcancelSwicth,EventMode;
 
     EcColliderController ECC;
     SpriteRenderer SR;//自分のSpriteRendererを入れる変数
@@ -203,6 +204,19 @@ public class groundController : MonoBehaviour
             if (hp <= 0)
             {
                 //Destroy(gameObject);
+            }
+        }else if (EventMode==true)
+        {
+            if (animationcancelSwicth==true)
+            {
+                anim.SetBool("run", false);
+                anim.SetBool("lightAttack", false);
+                anim.SetBool("hevayAttack", false);
+                anim.SetBool("counter", false);
+                anim.SetBool("counterattack", false);
+                anim.SetBool("guard", false);
+                anim.SetBool("guardbreak", false);
+                animationcancelSwicth = false;
             }
         }
     }

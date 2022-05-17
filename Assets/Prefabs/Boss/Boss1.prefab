@@ -145,9 +145,9 @@ MonoBehaviour:
   MaxStopTime: 0.5
   MaxXposition: 15
   MMaxXposition: -15
+  StratSwicth: 1
   aa: 20
   hp: 0
-  bulletSwicth: 0
 --- !u!50 &3985558525097206090
 Rigidbody2D:
   serializedVersion: 4

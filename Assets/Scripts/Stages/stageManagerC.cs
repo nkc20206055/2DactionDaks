@@ -10,11 +10,13 @@ public class stageManagerC : MonoBehaviour
     [SerializeField] GameObject GameoverUI;//Gameoverで出現するUI
     public GameObject stopUIhaikei;
 
+    public int Eventnumber;//イベントを行った回数
     //public float SavePosY;//セーブポイントのY座標保存用
     public string retrySceneName;//リトライした時に行くSceneの名前をいれる
     public string GOSceneName;//ゲームオーバーした時に行くSceneの名前をいれる
     public bool normalSwicth;//お試しなどのSceneではtrueにしておく
     public bool pauseSwicth;
+    public bool EventSwicth;//イベントが起きてるかどうか
 
     GameObject playerG, bossG;
     groundController gC;
@@ -26,13 +28,17 @@ public class stageManagerC : MonoBehaviour
     public void Retry()//リトライ
     {
         //PlayerPrefs.Save();//"SaveXpos","SaveYpos"を保存
+        Time.timeScale = 1f;
         SceneManager.LoadScene(retrySceneName);
     }
     public void GameOver()//ゲームオーバー
     {
         PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
         PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+        PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
         //SceneManager.LoadScene(GOSceneName);
+
+        SceneManager.LoadScene(retrySceneName);
     }
 
 
@@ -74,6 +80,7 @@ public class stageManagerC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1f;
         if (normalSwicth==false) {
             playerG = GameObject.FindWithTag("Player");
             gC = playerG.GetComponent<groundController>();
@@ -81,7 +88,7 @@ public class stageManagerC : MonoBehaviour
             stopI = stopUIhaikei.GetComponent<Image>();
             stopmodeSwicth = false;
             DestroyMi = false;
-
+            EventSwicth = true;
             //PlayerPrefs.SetString("SaveXpos","SaveYpos");//位置のセーブ用
             if (PlayerPrefs.HasKey("SaveXpos") && PlayerPrefs.HasKey("SaveYpos"))//セーブがあったら
             {
@@ -94,10 +101,20 @@ public class stageManagerC : MonoBehaviour
                 Debug.Log("SaveXposデータとSaveYposデータは存在しません");
                 Vector2 Ppos = new Vector2(playerG.transform.position.x, 
                                            playerG.transform.position.y);
-                PlayerPrefs.SetString("SaveXpos", "SaveYpos");//位置のセーブ用
+                //PlayerPrefs.SetString("SaveXpos", "SaveYpos","EventN");//位置のセーブ用
                 PlayerPrefs.SetFloat("SaveXpos", Ppos.x);
                 PlayerPrefs.SetFloat("SaveYpos", Ppos.y);
                 playerG.transform.position = new Vector3(Ppos.x,Ppos.y,0);
+            }
+
+            if (PlayerPrefs.HasKey("EventN"))//イベント用の値があったら
+            {
+                Eventnumber = PlayerPrefs.GetInt("EventN");
+            }
+            else
+            {
+                PlayerPrefs.SetInt("EventN", 0);
+                Eventnumber = PlayerPrefs.GetInt("EventN");
             }
         }
 
@@ -123,25 +140,5 @@ public class stageManagerC : MonoBehaviour
             PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag=="Player")//セーブポイント用にプレイヤーの位置を保存する
-        {
-            Debug.Log("ヒット");
-            PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
-            PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
-            Vector2 savepos = collision.gameObject.transform.position;
-            PlayerPrefs.SetFloat("SaveXpos", savepos.x);
-            PlayerPrefs.SetFloat("SaveYpos", savepos.y);
-            if (PlayerPrefs.HasKey("SaveXpos") && PlayerPrefs.HasKey("SaveYpos"))
-            {
-                Debug.Log("SaveXposデータとSaveYposデータは存在します");
-            }
-            //if (PlayerPrefs.HasKey("SaveYpos"))
-            //{
-            //    Debug.Log("SaveYposデータは存在します");
-            //}
-
-        }
-    }
+    
 }

@@ -18,6 +18,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     public float nPosS,jumpAPpos;//攻撃を発生する場合のプレイヤーとの距離,ジャンプ攻撃を発生する場合のプレイヤーとの距離
     public float MaxStopTime;//Normal時に考える時間
     public float MaxXposition, MMaxXposition;//ジャンプ用　左側にジャンプする位置、右側にジャンプする位置
+    public bool StratSwicth;//始まってからすぐに動くどうか
     
     float MaxjumpPos;
     public float aa;
@@ -46,6 +47,15 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
 
     void StartA()//初めに動くアニメーション
     {
+        if (StratSwicth == true)
+        {
+            anim.SetFloat("changeSpeed", 1);
+            //changeState(STATE.normal);
+        }
+        else
+        {
+            anim.SetFloat("changeSpeed", 0);
+        }
         anim.SetBool("startS", true);
     }
     void Normal()//通常
@@ -608,6 +618,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         MaxcounterCount = 2;
         counterCount = 0;
         anim = GetComponent<Animator>();
+        //anim.SetBool("startS", true);
         JumpStratSwicth = true;
         counterHetSwicth = false;
         attackSwicth = true;

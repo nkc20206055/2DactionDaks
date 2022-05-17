@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class jump : MonoBehaviour
 {
+    GameObject SM;
+    stageManagerC SMC;
+
     Rigidbody2D Rd2D;@//Rigidbody2D‚ğ•Û‘¶‚·‚é
     //ƒWƒƒƒ“ƒv•Ï”1
     enum Status
