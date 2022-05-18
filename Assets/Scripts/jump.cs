@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class jump : MonoBehaviour
 {
+    public bool EventMode;
+
     GameObject SM;
     stageManagerC SMC;
 
@@ -29,6 +31,7 @@ public class jump : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        EventMode = false;
         Rd2D = gameObject.GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
@@ -37,24 +40,28 @@ public class jump : MonoBehaviour
     void Update()
     {
         ////ƒWƒƒƒ“ƒv
-
+        //if (EventMode==false) {
         if (Input.GetKey(KeyCode.Space))
         {
-            if (!keyLook)
+            if (EventMode == false)
             {
-                jumpKey = true;
-            }
-            else
-            {
-                jumpKey = false;
+                if (!keyLook)
+                {
+                    jumpKey = true;
+                }
+                else
+                {
+                    jumpKey = false;
+                }
             }
         }
         else
         {
-            jumpKey = false;
-            keyLook = false;
+                jumpKey = false;
+                keyLook = false;
 
         }
+        //}
     }
 
     private void FixedUpdate()

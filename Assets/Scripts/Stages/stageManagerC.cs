@@ -80,7 +80,7 @@ public class stageManagerC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;//ゲースピードを通常に戻す
         if (normalSwicth==false) {
             playerG = GameObject.FindWithTag("Player");
             gC = playerG.GetComponent<groundController>();
@@ -134,6 +134,7 @@ public class stageManagerC : MonoBehaviour
             }
         }
 
+        //お試し
         if (Input.GetKeyDown(KeyCode.Delete))//PlayerPrefsは勝手に保存されているんで注意
         {
             PlayerPrefs.DeleteKey("SaveXpos");//キーの削除

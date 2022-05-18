@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class cameraController1 : MonoBehaviour
 {
+    public bool EventMode;
     public Vector2 moveMax;
     public Vector2 moveMin;
     Vector3 pos;
@@ -13,18 +14,21 @@ public class cameraController1 : MonoBehaviour
     {
         //タグでプレイヤーのオブジェクトか判断して入れる
         player = GameObject.FindWithTag("Player");
+        EventMode = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // カメラをプレーヤーの位置に合わせる
-        pos = player.GetComponent<Transform>().position;
+        if (EventMode==false) {
+            // カメラをプレーヤーの位置に合わせる
+            pos = player.GetComponent<Transform>().position;
 
-        // カメラの移動範囲制限
-        pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
-        pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
+            // カメラの移動範囲制限
+            pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
+            pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
 
-        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+            transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+        }
     }
 }

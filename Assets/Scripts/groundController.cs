@@ -115,6 +115,8 @@ public class groundController : MonoBehaviour
         MouseSwicth = true;
         countSpeed = true;
         damageHetOn = false;
+        EventMode = false;
+        animationcancelSwicth = true;
         sliderS = slider.maxValue;
         //Debug.Log(sliderS);
     }
@@ -209,6 +211,7 @@ public class groundController : MonoBehaviour
         {
             if (animationcancelSwicth==true)
             {
+                Debug.Log("“®‚¢‚½");
                 anim.SetBool("run", false);
                 anim.SetBool("lightAttack", false);
                 anim.SetBool("hevayAttack", false);

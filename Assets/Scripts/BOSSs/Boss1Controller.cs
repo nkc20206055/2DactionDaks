@@ -17,8 +17,8 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     public float moveSpeed,JumpSpeed;//移動スピード,ジャンプスピード
     public float nPosS,jumpAPpos;//攻撃を発生する場合のプレイヤーとの距離,ジャンプ攻撃を発生する場合のプレイヤーとの距離
     public float MaxStopTime;//Normal時に考える時間
-    public float MaxXposition, MMaxXposition;//ジャンプ用　左側にジャンプする位置、右側にジャンプする位置
-    public bool StratSwicth;//始まってからすぐに動くどうか
+    public float MaxXposition, MMaxXposition;//ジャンプ用　右側にジャンプする位置、左側にジャンプする位置
+    public bool StratSwicth,SAswicth;//始まってからすぐに動くどうか
     
     float MaxjumpPos;
     public float aa;
@@ -68,6 +68,8 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         counterHetSwicth = false;
         DownSwcith = true;
         bulletSwicth = true;
+        StratSwicth = false;
+        SAswicth = false;
         attackNO = 0;
         attackNcount = 0;
         anim.SetBool("move", false);
@@ -101,6 +103,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         //Debug.Log("移動");
         if (attackNumberS==true)
         {
+            //StratSwicth = false;
             attackNO = Random.Range(1, 4);
             jumpattackR = Random.Range(1, 7);//通常ジャンプかジャンプ攻撃か
             if (attackNO==2||attackNO==3)//2回攻撃をする
@@ -629,7 +632,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         bulletSwicth = true;
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         stopTime = MaxStopTime;//最初だけすぐに動けるようにする
-
+        SAswicth = true;
     }
 
     // Update is called once per frame
