@@ -277,8 +277,12 @@ MonoBehaviour:
   stopUI: {fileID: 0}
   GameoverUI: {fileID: 0}
   stopUIhaikei: {fileID: 0}
+  Eventnumber: 0
+  retrySceneName: 
+  GOSceneName: 
   normalSwicth: 1
   pauseSwicth: 0
+  EventSwicth: 0
 --- !u!4 &1422117941
 Transform:
   m_ObjectHideFlags: 0
