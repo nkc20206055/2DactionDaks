@@ -27,7 +27,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     private int HP;//体力
     private float Savedirection,direction;//移動時の向き保存用,向きの値を入れる用
     private float attackTime;//攻撃するまでの時間をためる
-    private bool attackSwicth;
+    private bool attackSwicth,attacktimeSwicth;
     private bool counterHetSwicth;//カウンターが当たったら動くbool型
     private bool guardSwicth;//ガードしているかどうか
     void Normal()
@@ -41,7 +41,9 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         anim.SetBool("damage", false);
 
         guardSwicth = true;
-        attackTime = 0;
+        if (attacktimeSwicth==false) {
+            attackTime = 0;
+        }
         attackSwicth = false;
 
         changeState(STATE.move);
@@ -52,10 +54,12 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         if (attackTime>= Maxattacktime)//attackTimeがたまったら
         {
             attackSwicth = true;
+            attacktimeSwicth = false;
         }
         else if (attackTime < Maxattacktime)//attackTimeがたまっていない
         {
             attackTime += 1 * Time.deltaTime;
+            attacktimeSwicth = true;
         }
         savePlayerPos = playerG.transform.position;//プレイヤーの位置を代入
         savePlayerPos = transform.position - savePlayerPos;//プレイヤーの位置とこれの位置を引く
@@ -189,6 +193,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         targetRenderer = GetComponent<Renderer>();
         guardSwicth = true;
+        attacktimeSwicth = true;
         counterHetSwicth = false;
     }
 

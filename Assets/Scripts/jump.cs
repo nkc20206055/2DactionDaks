@@ -19,8 +19,10 @@ public class jump : MonoBehaviour
     }
 
     Status playerStatus = Status.GROUND;   //プレイヤーの状態
-    float firstSpeed = 16f;   //初速
-    const float gravity = 120.0f;    //重力
+    //float firstSpeed = 16f;   //初速
+    float firstSpeed = 21f;   //初速（変更したほう）
+    //const float gravity = 120.0f;    //重力
+    const float gravity = 60.0f;    //重力（変更したほう）
     const float jumpLowerLimit = 0.03f;
     private Animator anim = null;
 
