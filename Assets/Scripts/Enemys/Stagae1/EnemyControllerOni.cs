@@ -27,9 +27,10 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     private int HP;//体力
     private float Savedirection,direction;//移動時の向き保存用,向きの値を入れる用
     private float attackTime;//攻撃するまでの時間をためる
-    private bool attackSwicth,attacktimeSwicth;
+    private bool attackSwicth,attacktimeSwicth,attackplustime;
     private bool counterHetSwicth;//カウンターが当たったら動くbool型
     private bool guardSwicth;//ガードしているかどうか
+    private bool damageSwicth;//ダメージが通るかどうか
     void Normal()
     {
         Debug.Log("通常");
@@ -45,7 +46,8 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
             attackTime = 0;
         }
         attackSwicth = false;
-
+        attackplustime = true;
+        //damageSwicth = true;
         changeState(STATE.move);
     }
     void Move()
@@ -68,6 +70,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
             if (attackSwicth==true) //攻撃開始
             {
                 guardSwicth = false;
+                //damageSwicth = false; 
                 anim.SetBool("move", false);
                 changeState(STATE.attack);
             }
@@ -125,6 +128,11 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     }
     void Guard()//防御
     {
+        if (attackplustime==true)
+        {
+            attackTime += 0.5f;
+            attackplustime = false;
+        }
         anim.SetBool("guard", true);
     }
     void Counter()
@@ -164,18 +172,18 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
             changeState(STATE.guard);
         }
         else
-        {
-            Debug.Log("damage");
-            anim.SetBool("move", false);
-            anim.SetBool("attack", false);
-            anim.SetBool("guard", false);
-            anim.SetBool("counterhet", false);
-            HP -= h;
-            if (HP<=0)//HPが0になったら
-            {
-                Destroy();//死亡
-            }
-            changeState(STATE.damage);
+        {   
+                Debug.Log("damage");
+                anim.SetBool("move", false);
+                anim.SetBool("attack", false);
+                anim.SetBool("guard", false);
+                anim.SetBool("counterhet", false);
+                HP -= h;
+                if (HP <= 0)//HPが0になったら
+                {
+                    Destroy();//死亡
+                }
+                changeState(STATE.damage);  
         }
     }
     private void changeState(STATE _state)//ステートを切り替える
@@ -195,6 +203,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         guardSwicth = true;
         attacktimeSwicth = true;
         counterHetSwicth = false;
+        //damageSwicth = true;
     }
 
     // Update is called once per frame

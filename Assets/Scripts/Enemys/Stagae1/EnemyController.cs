@@ -162,6 +162,7 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
         Onlyonce = true;
         counterHetSwicth = false;
         anim = GetComponent<Animator>();
+        anim.SetFloat("movespeed", moveSpeed + 0.5f);
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         targetRenderer = GetComponent<Renderer>();
     }

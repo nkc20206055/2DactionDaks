@@ -1933,6 +1933,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sisakuPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 3658527049209789389, guid: 20cb30b6a418cf5439c519e9378b65a1, type: 3}
+      propertyPath: m_GravityScale
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 3658527049209789390, guid: 20cb30b6a418cf5439c519e9378b65a1, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2109,7 +2113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5929840023522014226, guid: f82da9deeb00cbb4b8f03345c7617801, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5929840023522014238, guid: f82da9deeb00cbb4b8f03345c7617801, type: 3}
       propertyPath: m_RootOrder
@@ -2168,6 +2172,10 @@ PrefabInstance:
       propertyPath: counterHetSwicth
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8879994436838873675, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8879994436838873717, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2218,7 +2226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8879994436838873718, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f45d39b6adf0a8841b81f3742c4d1454, type: 3}
