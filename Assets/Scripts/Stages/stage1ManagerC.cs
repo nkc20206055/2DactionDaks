@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class stage1ManagerC : MonoBehaviour
 {
+    [SerializeField] GameObject tutoralY, tutoralY2;//説明用の矢印を入れる
+    public Text tutorialTextO;
     public Image TutorialUI;//チュートリアルで表示する文字画像
 
     GameObject playerG,BossG,CameraG;
@@ -15,32 +17,69 @@ public class stage1ManagerC : MonoBehaviour
     cameraController1 cC1;
     Boss1Controller B1C;
     stageManagerC sMC;
-    int TutorialNamber;//チュートリアルの順番を入れる
+    /*public */int TutorialNamber;//チュートリアルの順番を入れる
     float tutorialTime, MaxtutorialTime;//チュートリアル説明の時間,チュートリアルの最大時間
     float ImageFadeTime=0;
     string tutorial;
     bool EventStratSwcith;
     bool tutorialNSwicth/*,fadeSwicth*/;//TutorialNamber更新用スイッチ,フェードする場合に起動
     public bool fadeSwicth;//フェードする場合に起動
+    bool TutorialNinSwicth;
 
 
     void Imagefade()//チュートリアルの文字画像をフェードする
     {
         if (fadeSwicth==true)
         {
-            if (ImageFadeTime<=255)
+            if (tutorialTextO.color.a < 1)
             {
+                //画像
+                //ImageFadeTime = 1f * Time.deltaTime;
+                //TutorialUI.color += new Color(0, 0, 0, ImageFadeTime);
+
+                //テキスト
                 ImageFadeTime = 1f * Time.deltaTime;
-                TutorialUI.color += new Color(0, 0, 0, ImageFadeTime);
+                tutorialTextO.color += new Color(0, 0, 0, ImageFadeTime);
+                Debug.Log(tutorialTextO.color.a);
             }
+            //else if(ImageFadeTime >= 255)
+            //{
+            //    tutorialTextO.color = new Color(0, 0, 0, 255f);
+            //    if (TutorialNinSwicth==true)
+            //    {
+            //        TutorialNamber++;
+            //        TutorialNinSwicth = false;
+            //    }
+            //    //fadeSwicth = false;
+            //}
         }
         else
         {
-            if (ImageFadeTime>=0)
+            
+            if (tutorialTextO.color.a >= 0.1f)
             {
+                //画像
+                //ImageFadeTime = 1f * Time.deltaTime;
+                //TutorialUI.color -= new Color(0, 0, 0, ImageFadeTime);
+
+                //テキスト
                 ImageFadeTime = 1f * Time.deltaTime;
-                TutorialUI.color -= new Color(0, 0, 0, ImageFadeTime);
+                tutorialTextO.color -= new Color(0, 0, 0, ImageFadeTime);
+                Debug.Log(tutorialTextO.color.a);
+
+            }else if (tutorialTextO.color.a < 0.1f)
+            {
+                
+                tutorialTextO.color = new Color(0, 0, 0, 0f);
+                if (TutorialNinSwicth == true)
+                {
+                    Debug.Log("次の説明");
+                    TutorialNamber++;
+                    tutorialNSwicth = true;
+                    TutorialNinSwicth = false;
+                }
             }
+
         }
     }
     // Start is called before the first frame update
@@ -55,10 +94,11 @@ public class stage1ManagerC : MonoBehaviour
         B1C = BossG.GetComponent<Boss1Controller>();        //ボスにあるBoss1Controllerを取得
         CameraG = GameObject.Find("Main Camera");           //メインカメラを取得
         cC1 = CameraG.GetComponent<cameraController1>();    //メインカメラにあるcameraController1を取得
-        TutorialNamber = 0;
+        TutorialNamber = -1;
         MaxtutorialTime = 2;
         EventStratSwcith = true;
         tutorialNSwicth = true;
+        TutorialNinSwicth = false;
     }
 
     // Update is called once per frame
@@ -67,59 +107,140 @@ public class stage1ManagerC : MonoBehaviour
         if (sMC.Eventnumber == 0)//チュートリアル
         {
             Imagefade();
-
-            if (TutorialNamber==0)//移動
+            if (TutorialNamber==-1)
             {
                 if (tutorialNSwicth == true)
                 {
+                    Debug.Log("チュートリアル");
+                    //fadeSwicth = true;
+                    tutorialNSwicth = false;
+                }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    tutorialNSwicth = true;
+                    TutorialNamber++;
+                }
+            }
+            else if (TutorialNamber==0)//移動
+            {
+                if (tutorialNSwicth == true)
+                {
+                    tutorialTextO.text = "A、Dで移動";
+                    tutorialTime = 0;
                     Debug.Log("移動");
                     fadeSwicth = true;
                     tutorialNSwicth = false;
+                }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    TutorialNinSwicth = true;
+                    fadeSwicth = false;
                 }
             }
             else if (TutorialNamber == 1)//ジャンプ
             {
                 if (tutorialNSwicth==true)
                 {
-
+                    tutorialTextO.text = "spaceでジャンプ";
+                    tutorialTime = 0;
+                    Debug.Log("ジャンプ");
+                    fadeSwicth = true;
                     tutorialNSwicth = false;
+                }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    TutorialNinSwicth = true;
+                    fadeSwicth = false;
                 }
             }
             else if (TutorialNamber == 2)//攻撃
             {
                 if (tutorialNSwicth == true)
                 {
-
+                    tutorialTextO.text = "マウス左クリックで\n弱攻撃";
+                    MaxtutorialTime = 6;
+                    tutorialTime = 0;
+                    Debug.Log("攻撃");
+                    fadeSwicth = true;
                     tutorialNSwicth = false;
+                }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    tutoralY.SetActive(false);
+                    TutorialNinSwicth = true;
+                    fadeSwicth = false;
+                }else if (tutorialTime>=2&&tutorialTime < 4)
+                {
+                    tutoralY.SetActive(true);
+                    tutorialTextO.text = "左クリックを長押しすると\nゲージが溜まり";
+                }
+                else if (tutorialTime >= 4 && tutorialTime < MaxtutorialTime)
+                {
+                    tutorialTextO.text = "ゲージMaxで強攻撃";
                 }
             }
             else if (TutorialNamber == 3)//ガード
             {
                 if (tutorialNSwicth == true)
                 {
-
+                    tutorialTextO.text = "マウス右クリック長押しで\nガード";
+                    MaxtutorialTime = 6;
+                    tutorialTime = 0;
+                    Debug.Log("ガード");
+                    fadeSwicth = true;
                     tutorialNSwicth = false;
+                }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    tutoralY2.SetActive(false);
+                    TutorialNinSwicth = true;
+                    fadeSwicth = false;
+                }
+                else if (tutorialTime >= 2 && tutorialTime < 4)
+                {
+                    tutoralY2.SetActive(true);
+                    tutorialTextO.text = "ガード中に攻撃を受けると\nゲージが減ります";
+                }
+                else if (tutorialTime >= 4 && tutorialTime < MaxtutorialTime)
+                {
+                    tutorialTextO.text = "このゲージがなくなると\n大きな隙をさらすので注意";
                 }
             }
             else if (TutorialNamber == 4)//カウンター
             {
                 if (tutorialNSwicth == true)
                 {
-
+                    tutorialTextO.text = "マウス右クリックで\nカウンター";
+                    MaxtutorialTime = 6;
+                    tutorialTime = 0;
+                    Debug.Log("カウンター");
+                    fadeSwicth = true;
                     tutorialNSwicth = false;
                 }
             }
 
-            if (TutorialNamber<4&& TutorialNamber>4) {//チュートリアル表示時間
-                if (tutorialTime >= MaxtutorialTime)
-                {
-                    TutorialNamber++;
-                }
-                else
-                {
-                    tutorialTime += 1 * Time.deltaTime;
-                }
+
+            if (tutorialTime < MaxtutorialTime)
+            {
+                tutorialTime += 1 * Time.deltaTime;
+                //Debug.Log(tutorialTime);
             }
+
+            //if (TutorialNamber<4&& TutorialNamber>4) {//チュートリアル表示時間
+            //    if (tutorialTime >= MaxtutorialTime)
+            //    {
+            //        TutorialNamber++;
+            //    }
+            //    else
+            //    {
+            //        tutorialTime += 1 * Time.deltaTime;
+            //    }
+            //}
         }
         else if (sMC.Eventnumber==2)//ボスイベント
         {
