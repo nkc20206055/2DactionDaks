@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class SaveObject : MonoBehaviour
 {
-    public bool SaveMode,lasteventSwicth;
+    public bool SaveMode,lasteventSwicth,eventSwicth;
+    GameObject CameraG;
     stageManagerC sMC;
     int SaveIeventN;
     // Start is called before the first frame update
     void Start()
     {
+        CameraG = GameObject.FindWithTag("MainCamera");
         if (SaveMode==false)
         {
             sMC = GameObject.FindWithTag("stageManager").GetComponent<stageManagerC>();
@@ -32,9 +34,14 @@ public class SaveObject : MonoBehaviour
                     Debug.Log("ヒット");
                     PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
                     PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+                    PlayerPrefs.DeleteKey("SaveCXpos");
+                    PlayerPrefs.DeleteKey("SaveCYpos");
                     Vector2 savepos = collision.gameObject.transform.position;
                     PlayerPrefs.SetFloat("SaveXpos", savepos.x);
                     PlayerPrefs.SetFloat("SaveYpos", transform.position.y);
+                    Vector2 SaveposC = CameraG.transform.position;
+                    PlayerPrefs.SetFloat("SaveXpos", SaveposC.x);
+                    PlayerPrefs.SetFloat("SaveYpos", SaveposC.y);
                     if (PlayerPrefs.HasKey("SaveXpos") && PlayerPrefs.HasKey("SaveYpos"))
                     {
                         Debug.Log("SaveXposデータとSaveYposデータは存在します");
@@ -43,21 +50,26 @@ public class SaveObject : MonoBehaviour
             }
             else //イベントが発生する場合に使用
             {
-                //sMC.Eventnumber++;
-                if (lasteventSwicth == true)
-                {
-                    sMC.Eventnumber++;
-                    SaveIeventN = sMC.Eventnumber;
-                    SaveIeventN--;
-                }
-                else
-                {
-                    sMC.Eventnumber++;
-                    SaveIeventN = sMC.Eventnumber;
-                }
-                PlayerPrefs.SetInt("EventN", SaveIeventN);
-                sMC.EventSwicth = true;
-                gameObject.SetActive(false);
+                //if (eventSwicth==true) {
+
+                //}
+                //else {
+                    //sMC.Eventnumber++;
+                    if (lasteventSwicth == true)
+                    {
+                        sMC.Eventnumber++;
+                        SaveIeventN = sMC.Eventnumber;
+                        SaveIeventN--;
+                    }
+                    else
+                    {
+                        sMC.Eventnumber++;
+                        SaveIeventN = sMC.Eventnumber;
+                    }
+                    PlayerPrefs.SetInt("EventN", SaveIeventN);
+                    sMC.EventSwicth = true;
+                    gameObject.SetActive(false);
+                //}
             }
         }
     }

@@ -13,6 +13,7 @@ public class stage1ManagerC : MonoBehaviour
     public Image TutorialUI;//チュートリアルで表示する文字画像
     public Image whitebackI;
 
+    Vector2 EventPos;
     GameObject playerG,BossG,CameraG;
     PlayerController PC;
     groundController gC;
@@ -314,7 +315,11 @@ public class stage1ManagerC : MonoBehaviour
                     PlayerPrefs.SetInt("EventN", 1);
                     PC.playerPosXClamp = 500f;
                     PC.MinsplayerPosXClamp = 43.52f;
+                    PlayerPrefs.DeleteKey("SaveCXpos");
+                    PlayerPrefs.DeleteKey("SaveCYpos");
                     CameraG.transform.position = new Vector3(63.6f, 7f, -10);
+                    PlayerPrefs.SetFloat("SaveCXpos",63.6f);
+                    PlayerPrefs.SetFloat("SaveCYpos",7f);
                     cC1.moveMax.x=500f;
                     cC1.moveMin.x = 63.6f;
                     //プレイヤーの移動範囲
@@ -365,7 +370,7 @@ public class stage1ManagerC : MonoBehaviour
         else if (sMC.Eventnumber==2)//ボスイベント
         {
             if (sMC.EventSwicth==true) {
-                if (CameraG.transform.position.x< 51.3f)//カメラがx軸の51.3fにたどり着いていなとき
+                if (CameraG.transform.position.x< 327.2f)//カメラがx軸の51.3fにたどり着いていなとき
                 {
                     Debug.Log("動いた");
                     if (EventStratSwcith == true) {
@@ -373,13 +378,18 @@ public class stage1ManagerC : MonoBehaviour
                         gC.EventMode = true;
                         JumpC.EventMode = true;
                         cC1.EventMode = true;
-
-                        PC.playerPosXClamp = 71.4f;
-                        PC.MinsplayerPosXClamp = 31.9f;
+                        CameraG.transform.position=new Vector3(CameraG.transform.position.x,15.3f, 
+                                                                    CameraG.transform.position.z);
+                        PC.playerPosXClamp = 364.1f;
+                        PC.MinsplayerPosXClamp = 307.24f;
                         EventStratSwcith = false;
                     }
-                    float ss = 10*1 * Time.deltaTime;
-                    CameraG.transform.position += new Vector3(ss,0,0);
+                    if (CameraG.transform.position.y< 23.6f)
+                    {
+                        EventPos.y = 4.5f*1 * Time.deltaTime;
+                    }
+                    EventPos.x = 10*1 * Time.deltaTime;
+                    CameraG.transform.position += new Vector3(EventPos.x, EventPos.y, 0);
                     //CameraG.transform.position = new Vector3(51.3f, CameraG.transform.position.y, 
                     //                                                CameraG.transform.position.z);
 
@@ -399,6 +409,10 @@ public class stage1ManagerC : MonoBehaviour
             {
                 if (EventStratSwcith==true)
                 {
+                    cC1.moveMax.x = 343.6f;
+                    cC1.moveMin.x = 327.3f;
+                    cC1.EventMode = false;
+                    cC1.bossMode = true;
                     PC.EventMode = false;
                     gC.EventMode = false;
                     JumpC.EventMode = false;

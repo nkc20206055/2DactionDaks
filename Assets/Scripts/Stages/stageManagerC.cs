@@ -18,7 +18,7 @@ public class stageManagerC : MonoBehaviour
     public bool pauseSwicth;
     public bool EventSwicth;//イベントが起きてるかどうか
 
-    GameObject playerG, bossG;
+    GameObject playerG, bossG,CameraG;
     PlayerController pc;
     groundController gC;
     cameraController1 cc1;
@@ -95,7 +95,8 @@ public class stageManagerC : MonoBehaviour
         Time.timeScale = 1f;//ゲースピードを通常に戻す
         if (normalSwicth==false) {
             playerG = GameObject.FindWithTag("Player");
-            cc1 = GameObject.FindWithTag("MainCamera").GetComponent<cameraController1>();
+            CameraG = GameObject.FindWithTag("MainCamera");
+            cc1 = CameraG.GetComponent<cameraController1>();
             pc = playerG.GetComponent<PlayerController>();
             gC = playerG.GetComponent<groundController>();
             //bossG = GameObject.FindWithTag("boss");
@@ -109,6 +110,8 @@ public class stageManagerC : MonoBehaviour
                 Debug.Log("SaveXposデータとSaveYposデータは存在します");
                 Vector3 pos = new Vector3(PlayerPrefs.GetFloat("SaveXpos"), PlayerPrefs.GetFloat("SaveYpos"), 0);
                 playerG.transform.position = pos;
+                Vector3 Cpos = new Vector3(PlayerPrefs.GetFloat("SaveCXpos"), PlayerPrefs.GetFloat("SaveCYpos"), -10);
+                CameraG.transform.position = Cpos;
                 if (PlayerPrefs.HasKey("CMaxPosx") && PlayerPrefs.HasKey("CMaxPosy") &&
                     PlayerPrefs.HasKey("CMinPosx") && PlayerPrefs.HasKey("CMinPosy"))
                 {
@@ -205,6 +208,9 @@ public class stageManagerC : MonoBehaviour
             PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
             PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
             PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
+
+            PlayerPrefs.DeleteKey("SaveCXpos");
+            PlayerPrefs.DeleteKey("SaveCYpos");
             //プレイヤーの移動範囲
             PlayerPrefs.DeleteKey("CMaxPosx");
             PlayerPrefs.DeleteKey("CMaxPosy");
