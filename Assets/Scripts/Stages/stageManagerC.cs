@@ -19,7 +19,9 @@ public class stageManagerC : MonoBehaviour
     public bool EventSwicth;//イベントが起きてるかどうか
 
     GameObject playerG, bossG;
+    PlayerController pc;
     groundController gC;
+    cameraController1 cc1;
 
     private Image stopI;
     private bool stopmodeSwicth, DestroyMi;
@@ -36,6 +38,16 @@ public class stageManagerC : MonoBehaviour
         PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
         PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
         PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
+        //プレイヤーの移動範囲
+        PlayerPrefs.DeleteKey("CMaxPosx");
+        PlayerPrefs.DeleteKey("CMaxPosy");
+        PlayerPrefs.DeleteKey("CMinPosx");
+        PlayerPrefs.DeleteKey("CMinPosy");
+        //カメラの移動範囲
+        PlayerPrefs.DeleteKey("CaMaxPosx");
+        PlayerPrefs.DeleteKey("CaMaxPosy");
+        PlayerPrefs.DeleteKey("CaMinPosx");
+        PlayerPrefs.DeleteKey("CaMinPosy");
         //SceneManager.LoadScene(GOSceneName);
 
         SceneManager.LoadScene(retrySceneName);
@@ -83,6 +95,8 @@ public class stageManagerC : MonoBehaviour
         Time.timeScale = 1f;//ゲースピードを通常に戻す
         if (normalSwicth==false) {
             playerG = GameObject.FindWithTag("Player");
+            cc1 = GameObject.FindWithTag("MainCamera").GetComponent<cameraController1>();
+            pc = playerG.GetComponent<PlayerController>();
             gC = playerG.GetComponent<groundController>();
             //bossG = GameObject.FindWithTag("boss");
             stopI = stopUIhaikei.GetComponent<Image>();
@@ -95,6 +109,45 @@ public class stageManagerC : MonoBehaviour
                 Debug.Log("SaveXposデータとSaveYposデータは存在します");
                 Vector3 pos = new Vector3(PlayerPrefs.GetFloat("SaveXpos"), PlayerPrefs.GetFloat("SaveYpos"), 0);
                 playerG.transform.position = pos;
+                if (PlayerPrefs.HasKey("CMaxPosx") && PlayerPrefs.HasKey("CMaxPosy") &&
+                    PlayerPrefs.HasKey("CMinPosx") && PlayerPrefs.HasKey("CMinPosy"))
+                {
+                    Debug.Log("四つのデータは存在します");
+                    pc.playerPosXClamp = PlayerPrefs.GetFloat("CMaxPosx");
+                    pc.playerPosYClamp = PlayerPrefs.GetFloat("CMaxPosy");
+                    pc.MinsplayerPosXClamp = PlayerPrefs.GetFloat("CMinPosx");
+                    pc.MinsplayerPosYClamp = PlayerPrefs.GetFloat("CMinPosy");
+
+                }
+                else
+                {
+                    Debug.Log("四つのデータは存在しません");
+                    //プレイヤーの移動範囲
+                    PlayerPrefs.SetFloat("CMaxPosx", pc.playerPosXClamp);
+                    PlayerPrefs.SetFloat("CMaxPosy", pc.playerPosYClamp);
+                    PlayerPrefs.SetFloat("CMinPosx", pc.MinsplayerPosXClamp);
+                    PlayerPrefs.SetFloat("CMinPosy", pc.MinsplayerPosYClamp);
+                }
+
+                if (PlayerPrefs.HasKey("CaMaxPosx") && PlayerPrefs.HasKey("CaMaxPosy") &&
+                    PlayerPrefs.HasKey("CaMinPosx") && PlayerPrefs.HasKey("CaMinPosy"))
+                {
+                    Debug.Log("カメラPosのデータは存在します");
+                    cc1.moveMax.x = PlayerPrefs.GetFloat("CaMaxPosx");
+                    cc1.moveMax.y = PlayerPrefs.GetFloat("CaMaxPosy");
+                    cc1.moveMin.x = PlayerPrefs.GetFloat("CaMinPosx");
+                    cc1.moveMin.y = PlayerPrefs.GetFloat("CaMinPosy");
+
+                }
+                else
+                {
+                    Debug.Log("カメラPosのデータは存在しません");
+                    //カメラの移動範囲
+                    PlayerPrefs.SetFloat("CaMaxPosx", cc1.moveMax.x);
+                    PlayerPrefs.SetFloat("CaMaxPosy", cc1.moveMax.y);
+                    PlayerPrefs.SetFloat("CaMinPosx", cc1.moveMin.x);
+                    PlayerPrefs.SetFloat("CaMinPosy", cc1.moveMin.y);
+                }
             }
             else//セーブがなかったら
             {
@@ -104,11 +157,23 @@ public class stageManagerC : MonoBehaviour
                 //PlayerPrefs.SetString("SaveXpos", "SaveYpos","EventN");//位置のセーブ用
                 PlayerPrefs.SetFloat("SaveXpos", Ppos.x);
                 PlayerPrefs.SetFloat("SaveYpos", Ppos.y);
+                //プレイヤーの移動範囲
+                PlayerPrefs.SetFloat("CMaxPosx", pc.playerPosXClamp);
+                PlayerPrefs.SetFloat("CMaxPosy", pc.playerPosYClamp);
+                PlayerPrefs.SetFloat("CMinPosx", pc.MinsplayerPosXClamp);
+                PlayerPrefs.SetFloat("CMinPosy", pc.MinsplayerPosYClamp);
+                //カメラの移動範囲
+                PlayerPrefs.SetFloat("CaMaxPosx", cc1.moveMax.x);
+                PlayerPrefs.SetFloat("CaMaxPosy", cc1.moveMax.y);
+                PlayerPrefs.SetFloat("CaMinPosx", cc1.moveMin.x);
+                PlayerPrefs.SetFloat("CaMinPosy", cc1.moveMin.y);
+
                 playerG.transform.position = new Vector3(Ppos.x,Ppos.y,0);
             }
 
             if (PlayerPrefs.HasKey("EventN"))//イベント用の値があったら
             {
+                Debug.Log("EventNデータは存在します");
                 Eventnumber = PlayerPrefs.GetInt("EventN");
             }
             else
@@ -139,6 +204,17 @@ public class stageManagerC : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
             PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+            PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
+            //プレイヤーの移動範囲
+            PlayerPrefs.DeleteKey("CMaxPosx");
+            PlayerPrefs.DeleteKey("CMaxPosy");
+            PlayerPrefs.DeleteKey("CMinPosx");
+            PlayerPrefs.DeleteKey("CMinPosy");
+            //カメラの移動範囲
+            PlayerPrefs.DeleteKey("CaMaxPosx");
+            PlayerPrefs.DeleteKey("CaMaxPosy");
+            PlayerPrefs.DeleteKey("CaMinPosx");
+            PlayerPrefs.DeleteKey("CaMinPosy");
         }
     }
     

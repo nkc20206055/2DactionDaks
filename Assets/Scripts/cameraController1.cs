@@ -21,12 +21,37 @@ public class cameraController1 : MonoBehaviour
     void Update()
     {
         if (EventMode==false) {
-            // カメラをプレーヤーの位置に合わせる
-            pos = player.GetComponent<Transform>().position;
+            float ssp = player.transform.position.y - transform.position.y;
+            if (ssp>-4)
+            {
+                Debug.Log(ssp+"近い");
+                float o = -1*(-4 - ssp);
+                Debug.Log(o);
 
-            // カメラの移動範囲制限
-            pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
-            pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
+                // カメラをプレーヤーの位置に合わせる
+                pos = player.GetComponent<Transform>().position;
+                pos = new Vector3(pos.x, pos.y + o, pos.z);
+
+                // カメラの移動範囲制限
+                pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
+                pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
+            }
+            else
+            {
+                // カメラをプレーヤーの位置に合わせる
+                pos = player.GetComponent<Transform>().position;
+
+                // カメラの移動範囲制限
+                pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
+                pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
+            }
+
+            //// カメラをプレーヤーの位置に合わせる
+            //pos = player.GetComponent<Transform>().position;
+
+            //// カメラの移動範囲制限
+            //pos.x = Mathf.Clamp(pos.x, moveMin.x, moveMax.x);
+            //pos.y = Mathf.Clamp(pos.y, moveMin.y, moveMax.y);
 
             transform.position = new Vector3(pos.x, pos.y, transform.position.z);
         }

@@ -24,7 +24,7 @@ public class stage1ManagerC : MonoBehaviour
     float tutorialTime, MaxtutorialTime;//チュートリアル説明の時間,チュートリアルの最大時間
     float ImageFadeTime=0;
     string tutorial;
-    bool EventStratSwcith;
+    bool GameStartSwicth,EventStratSwcith;
     bool tutorialNSwicth/*,fadeSwicth*/;//TutorialNamber更新用スイッチ,フェードする場合に起動
     public bool fadeSwicth,whiteImageSwicth;//フェードする場合に起動
     bool TutorialNinSwicth;
@@ -146,6 +146,7 @@ public class stage1ManagerC : MonoBehaviour
         cC1 = CameraG.GetComponent<cameraController1>();    //メインカメラにあるcameraController1を取得
         TutorialNamber = -1;
         MaxtutorialTime = 2;
+        //GameStartSwicth = true;
         EventStratSwcith = true;
         tutorialNSwicth = true;
         TutorialNinSwicth = false;
@@ -155,6 +156,10 @@ public class stage1ManagerC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (GameStartSwicth==true)
+        //{
+
+        //}
         if (sMC.Eventnumber == 0)//チュートリアル
         {
             Imagefade();
@@ -298,17 +303,26 @@ public class stage1ManagerC : MonoBehaviour
                     //tutorialTextO.color= new Color(0f,0f,0f,0f);
                     tutorialTextO.text = "";
                     tutorialbackGrund.SetActive(false);
-                    playerG.transform.position = new Vector3(54.32f,0.16f,0);
+                    Vector3 spp= new Vector3(54.32f, 0.16f, 0);
+                    playerG.transform.position = spp;
                     PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
                     PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+                    PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
                     Vector2 savepos = playerG.transform.position;
-                    PlayerPrefs.SetFloat("SaveXpos", savepos.x);
-                    PlayerPrefs.SetFloat("SaveYpos", transform.position.y);
+                    PlayerPrefs.SetFloat("SaveXpos", spp.x);
+                    PlayerPrefs.SetFloat("SaveYpos", spp.y);
+                    PlayerPrefs.SetInt("EventN", 1);
                     PC.playerPosXClamp = 500f;
                     PC.MinsplayerPosXClamp = 43.52f;
                     CameraG.transform.position = new Vector3(63.6f, 7f, -10);
                     cC1.moveMax.x=500f;
                     cC1.moveMin.x = 63.6f;
+                    //プレイヤーの移動範囲
+                    PlayerPrefs.SetFloat("CMaxPosx", PC.playerPosXClamp);
+                    PlayerPrefs.SetFloat("CMinPosx", PC.MinsplayerPosXClamp);
+                    //カメラの移動範囲
+                    PlayerPrefs.SetFloat("CaMaxPosx", cC1.moveMax.x);
+                    PlayerPrefs.SetFloat("CaMinPosx", cC1.moveMin.x);
                     whiteImageSwicth = true;
                     tutorialNSwicth = false;
                     //sMC.Eventnumber = 1;
@@ -334,6 +348,18 @@ public class stage1ManagerC : MonoBehaviour
             //}
         }else if (sMC.Eventnumber == 1)
         {
+            if (tutorialNSwicth==true)
+            {
+                tutorialTextO.text = "";
+                tutorialbackGrund.SetActive(false);
+                //PC.playerPosXClamp = 500f;
+                //PC.MinsplayerPosXClamp = 43.52f;
+                //playerG.transform.position = new Vector3(54.32f, 0.2f, 0);
+                //cC1.moveMax.x = 500f;
+                //cC1.moveMin.x = 63.6f;
+                //CameraG.transform.position = new Vector3(63.6f, 7.02f, -10);
+                tutorialNSwicth = false;
+            }
             //Debug.Log("通常ステージ");
         }
         else if (sMC.Eventnumber==2)//ボスイベント
