@@ -7,8 +7,11 @@ using UnityEngine.SceneManagement;
 public class stage1ManagerC : MonoBehaviour
 {
     [SerializeField] GameObject tutoralY, tutoralY2;//説明用の矢印を入れる
+    [SerializeField] GameObject tutoralEnemy;
+    public GameObject tutorialbackGrund;
     public Text tutorialTextO;
     public Image TutorialUI;//チュートリアルで表示する文字画像
+    public Image whitebackI;
 
     GameObject playerG,BossG,CameraG;
     PlayerController PC;
@@ -23,7 +26,7 @@ public class stage1ManagerC : MonoBehaviour
     string tutorial;
     bool EventStratSwcith;
     bool tutorialNSwicth/*,fadeSwicth*/;//TutorialNamber更新用スイッチ,フェードする場合に起動
-    public bool fadeSwicth;//フェードする場合に起動
+    public bool fadeSwicth,whiteImageSwicth;//フェードする場合に起動
     bool TutorialNinSwicth;
 
 
@@ -40,7 +43,7 @@ public class stage1ManagerC : MonoBehaviour
                 //テキスト
                 ImageFadeTime = 1f * Time.deltaTime;
                 tutorialTextO.color += new Color(0, 0, 0, ImageFadeTime);
-                Debug.Log(tutorialTextO.color.a);
+                //Debug.Log(tutorialTextO.color.a);
             }
             //else if(ImageFadeTime >= 255)
             //{
@@ -65,7 +68,7 @@ public class stage1ManagerC : MonoBehaviour
                 //テキスト
                 ImageFadeTime = 1f * Time.deltaTime;
                 tutorialTextO.color -= new Color(0, 0, 0, ImageFadeTime);
-                Debug.Log(tutorialTextO.color.a);
+                //Debug.Log(tutorialTextO.color.a);
 
             }else if (tutorialTextO.color.a < 0.1f)
             {
@@ -80,6 +83,53 @@ public class stage1ManagerC : MonoBehaviour
                 }
             }
 
+        }
+    }
+    void whiteImagefade()//手前の画像のフェード処理
+    {
+        if (whiteImageSwicth==false)
+        {
+            if (whitebackI.color.a < 1)
+            {
+                //テキスト
+                ImageFadeTime = 0.7f * Time.deltaTime;
+                whitebackI.color += new Color(0, 0, 0, ImageFadeTime);
+                Debug.Log(whitebackI.color.a);
+
+            }
+            else if (whitebackI.color.a >=1f)
+            {
+
+                whitebackI.color = new Color(1, 1, 1, 1f);
+                if (TutorialNinSwicth == true)
+                {
+                    Debug.Log("次の説明");
+                    TutorialNamber++;
+                    tutorialNSwicth = true;
+                    TutorialNinSwicth = false;
+                }
+            }
+        }
+        else
+        {
+            if (whitebackI.color.a >= 0.1f)
+            {
+                //テキスト
+                ImageFadeTime = 0.7f * Time.deltaTime;
+                whitebackI.color -= new Color(0, 0, 0, ImageFadeTime);
+                Debug.Log(whitebackI.color.a);
+
+            }
+            else if (whitebackI.color.a < 0.1f)
+            {
+
+                whitebackI.color = new Color(1, 1, 1, 0f);
+                if (TutorialNamber==5) {
+                    tutorialTextO.color = new Color(0f, 0f, 0f, 0f);
+                    sMC.Eventnumber = 1;
+                }
+
+            }
         }
     }
     // Start is called before the first frame update
@@ -99,6 +149,7 @@ public class stage1ManagerC : MonoBehaviour
         EventStratSwcith = true;
         tutorialNSwicth = true;
         TutorialNinSwicth = false;
+        whiteImageSwicth = true;
     }
 
     // Update is called once per frame
@@ -107,6 +158,7 @@ public class stage1ManagerC : MonoBehaviour
         if (sMC.Eventnumber == 0)//チュートリアル
         {
             Imagefade();
+            whiteImagefade();
             if (TutorialNamber==-1)
             {
                 if (tutorialNSwicth == true)
@@ -222,6 +274,45 @@ public class stage1ManagerC : MonoBehaviour
                     fadeSwicth = true;
                     tutorialNSwicth = false;
                 }
+
+                if (tutorialTime >= MaxtutorialTime)
+                {
+                    if (tutoralEnemy==null) {
+                        TutorialNinSwicth = true;
+                        whiteImageSwicth = false;
+                    }
+                }
+                else if (tutorialTime >= 2 && tutorialTime < 4)
+                {
+                    tutorialTextO.text = "敵のオレンジ色の攻撃に\n合わせて使うことで";
+                }
+                else if (tutorialTime >= 4 && tutorialTime < MaxtutorialTime)
+                {
+                    tutoralEnemy.SetActive(true);
+                    tutorialTextO.text = "攻撃をはじいて、敵を隙だらけにできます。";
+                }
+            }else if (TutorialNamber == 5)
+            {
+                if (tutorialNSwicth == true)
+                {
+                    //tutorialTextO.color= new Color(0f,0f,0f,0f);
+                    tutorialTextO.text = "";
+                    tutorialbackGrund.SetActive(false);
+                    playerG.transform.position = new Vector3(54.32f,0.16f,0);
+                    PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
+                    PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+                    Vector2 savepos = playerG.transform.position;
+                    PlayerPrefs.SetFloat("SaveXpos", savepos.x);
+                    PlayerPrefs.SetFloat("SaveYpos", transform.position.y);
+                    PC.playerPosXClamp = 500f;
+                    PC.MinsplayerPosXClamp = 43.52f;
+                    CameraG.transform.position = new Vector3(63.6f, 7f, -10);
+                    cC1.moveMax.x=500f;
+                    cC1.moveMin.x = 63.6f;
+                    whiteImageSwicth = true;
+                    tutorialNSwicth = false;
+                    //sMC.Eventnumber = 1;
+                }
             }
 
 
@@ -241,6 +332,9 @@ public class stage1ManagerC : MonoBehaviour
             //        tutorialTime += 1 * Time.deltaTime;
             //    }
             //}
+        }else if (sMC.Eventnumber == 1)
+        {
+            //Debug.Log("通常ステージ");
         }
         else if (sMC.Eventnumber==2)//ボスイベント
         {

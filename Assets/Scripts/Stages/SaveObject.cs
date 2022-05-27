@@ -44,17 +44,17 @@ public class SaveObject : MonoBehaviour
             else //イベントが発生する場合に使用
             {
                 //sMC.Eventnumber++;
-                //if (lasteventSwicth==true)
-                //{
+                if (lasteventSwicth == true)
+                {
                     sMC.Eventnumber++;
                     SaveIeventN = sMC.Eventnumber;
                     SaveIeventN--;
-                //}
-                //else
-                //{
-                //    sMC.Eventnumber++;
-                //    SaveIeventN = sMC.Eventnumber;
-                //}
+                }
+                else
+                {
+                    sMC.Eventnumber++;
+                    SaveIeventN = sMC.Eventnumber;
+                }
                 PlayerPrefs.SetInt("EventN", SaveIeventN);
                 sMC.EventSwicth = true;
                 gameObject.SetActive(false);
