@@ -115,6 +115,11 @@ public class EnemyController : MonoBehaviour,EnemyDamageController
     }
     void DestroyM()//死亡時
     {
+        anim.Play("Destroy");
+        gameObject.layer = LayerMask.NameToLayer("Destroy");
+    }
+    void Sibou()
+    {
         Destroy(gameObject);
     }
     public void EnemyDamage(int h)//ダメージを受けた時※インターフェース

@@ -60,6 +60,7 @@ public class stageManagerC : MonoBehaviour
         {
             if (stopmodeSwicth == false)
             {
+                Cursor.visible = true;//カーソル表示
                 stopI.color = new Color(0, 0, 0, 0.5f);
                 stopUI.SetActive(true);
                 pauseSwicth = true;
@@ -68,6 +69,7 @@ public class stageManagerC : MonoBehaviour
             }
             else
             {
+                Cursor.visible = false;//カーソル非表示
                 stopI.color = new Color(0, 0, 0, 0);
                 stopUI.SetActive(false);
                 pauseSwicth = false;
@@ -81,6 +83,7 @@ public class stageManagerC : MonoBehaviour
         if (stopI.color.a>=0.7f)
         {
             Debug.Log("死亡");
+            Cursor.visible = true;//カーソル表示
             GameoverUI.SetActive(true);
         }
         else if (stopI.color.a< 0.7f)
@@ -92,8 +95,9 @@ public class stageManagerC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1f;//ゲースピードを通常に戻す
+        Time.timeScale = 1f;//ゲームスピードを通常に戻す
         if (normalSwicth==false) {
+            Cursor.visible = false;//カーソル非表示
             playerG = GameObject.FindWithTag("Player");
             CameraG = GameObject.FindWithTag("MainCamera");
             cc1 = CameraG.GetComponent<cameraController1>();
