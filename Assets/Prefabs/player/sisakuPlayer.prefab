@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 45
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -160,10 +160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 10
+  EventMode: 0
   gravity: 0
   MaxattackTime: 1
   playerPosXClamp: 15
   playerPosYClamp: 15
+  MinsplayerPosXClamp: 0
+  MinsplayerPosYClamp: 0
 --- !u!114 &3658527049209789394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3d0d7086f5cc64aa9d6fc29ab32f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventMode: 0
 --- !u!114 &3658527049209789393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +196,8 @@ MonoBehaviour:
   hpui: {fileID: 0}
   counterTime: 0.8
   damageTime: 3
+  animationcancelSwicth: 0
+  EventMode: 0
   hp: 0
 --- !u!1 &3658527049393863475
 GameObject:

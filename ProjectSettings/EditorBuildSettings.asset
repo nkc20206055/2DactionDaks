@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SisakuBossScene.unity
     guid: fadc23c0c475adf48a8a1cb0ac88aa47
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/stage1s/Stage1.unity
     guid: a1c5ba75b0dc89444ba2d7b3ad173431
+  - enabled: 1
+    path: Assets/Scenes/stage1s/Stage1hell.unity
+    guid: 59d5f6c538224184d844c00fdd696bef
   m_configObjects: {}

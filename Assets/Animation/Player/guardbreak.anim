@@ -20,13 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 7193240565161898514, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
+      value: {fileID: 8368488778787678610, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
     - time: 0.16666667
-      value: {fileID: 3045932097618936624, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
-    - time: 0.65
-      value: {fileID: -4544115071642392235, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
-    - time: 0.8333333
-      value: {fileID: -4544115071642392235, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
+      value: {fileID: 8368488778787678610, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
+    - time: 0.5
+      value: {fileID: -3288343773585279274, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
+    - time: 0.6666667
+      value: {fileID: -3288343773585279274, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,16 +46,16 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 7193240565161898514, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
-    - {fileID: 3045932097618936624, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
-    - {fileID: -4544115071642392235, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
-    - {fileID: -4544115071642392235, guid: e80d292b944b9ca41a05a30236fdd5f8, type: 3}
+    - {fileID: 8368488778787678610, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
+    - {fileID: 8368488778787678610, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
+    - {fileID: -3288343773585279274, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
+    - {fileID: -3288343773585279274, guid: 696bc47d6353b8e468d8862239871fec, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: 0.8333333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,7 +75,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1
+  - time: 0.8333333
     functionName: animationcancel
     data: 
     objectReferenceParameter: {fileID: 0}

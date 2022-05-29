@@ -8,6 +8,7 @@ public class stage1ManagerC : MonoBehaviour
 {
     [SerializeField] GameObject tutoralY, tutoralY2;//説明用の矢印を入れる
     [SerializeField] GameObject tutoralEnemy;
+    public GameObject PlayerUI;
     public GameObject tutorialbackGrund;
     public Text tutorialTextO;
     public Image TutorialUI;//チュートリアルで表示する文字画像
@@ -374,6 +375,7 @@ public class stage1ManagerC : MonoBehaviour
                 {
                     Debug.Log("動いた");
                     if (EventStratSwcith == true) {
+                        PlayerUI.SetActive(false);
                         PC.EventMode = true;
                         gC.EventMode = true;
                         JumpC.EventMode = true;
@@ -381,12 +383,15 @@ public class stage1ManagerC : MonoBehaviour
                         CameraG.transform.position=new Vector3(CameraG.transform.position.x,15.3f, 
                                                                     CameraG.transform.position.z);
                         PC.playerPosXClamp = 364.1f;
+                        //PC.playerPosXClamp = 347.82f;
+
+
                         PC.MinsplayerPosXClamp = 307.24f;
                         EventStratSwcith = false;
                     }
                     if (CameraG.transform.position.y< 23.6f)
                     {
-                        EventPos.y = 4.5f*1 * Time.deltaTime;
+                        EventPos.y = 3.5f*1 * Time.deltaTime;
                     }
                     EventPos.x = 10*1 * Time.deltaTime;
                     CameraG.transform.position += new Vector3(EventPos.x, EventPos.y, 0);
@@ -409,8 +414,11 @@ public class stage1ManagerC : MonoBehaviour
             {
                 if (EventStratSwcith==true)
                 {
+                    PlayerUI.SetActive(true);
                     cC1.moveMax.x = 343.6f;
-                    cC1.moveMin.x = 327.3f;
+                    //cC1.moveMax.x = 327.2f;
+
+                    cC1.moveMin.x = 327.2f;
                     cC1.EventMode = false;
                     cC1.bossMode = true;
                     PC.EventMode = false;
