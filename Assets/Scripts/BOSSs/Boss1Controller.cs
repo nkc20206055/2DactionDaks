@@ -11,6 +11,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     GameObject SM;
     stageManagerC SMC;
 
+    [SerializeField] AudioClip[] AC;
     [SerializeField] public GameObject attackC;
     [SerializeField] public GameObject bulletObject; 
     public float MaxHP;//最大体力
@@ -19,7 +20,8 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
     public float MaxStopTime;//Normal時に考える時間
     public float MaxXposition, MMaxXposition;//ジャンプ用　右側にジャンプする位置、左側にジャンプする位置
     public bool StratSwicth,SAswicth;//始まってからすぐに動くどうか
-    
+
+    AudioSource AS;
     float MaxjumpPos;
     public float aa;
 
@@ -573,7 +575,7 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         {
             hp -= h;
         }
-
+        SE(2);
         if (MaxHP/2>hp)//HPが半分になったら
         {
             if (SchangeSwicth==true) {
@@ -607,11 +609,17 @@ public class Boss1Controller : MonoBehaviour, EnemyDamageController
         //stopTime = 0;
         saveState = _state;
     }
+
+    public void SE(int i)
+    {
+        AS.PlayOneShot(AC[i]);
+    }
     // Start is called before the first frame update
     void Start()
     {
         SM = GameObject.FindWithTag("stageManager");
         SMC = SM.GetComponent<stageManagerC>();
+        AS = GetComponent<AudioSource>();
         SaveBpos = transform.position;
         hp = MaxHP;
         Maxattackcount = 2;//最初は2回

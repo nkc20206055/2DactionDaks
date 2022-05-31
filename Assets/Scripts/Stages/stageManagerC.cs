@@ -11,6 +11,7 @@ public class stageManagerC : MonoBehaviour
     [SerializeField] GameObject GameclearUI;
     public GameObject stopUIhaikei;
 
+    public AudioClip ac;
     public int Eventnumber;//イベントを行った回数
     //public float SavePosY;//セーブポイントのY座標保存用
     public string retrySceneName;//リトライした時に行くSceneの名前をいれる
@@ -24,6 +25,7 @@ public class stageManagerC : MonoBehaviour
     groundController gC;
     cameraController1 cc1;
     Boss1Controller B1C;
+    AudioSource AS;
 
     private Image stopI;
     private bool stopmodeSwicth, DestroyMi;
@@ -32,12 +34,16 @@ public class stageManagerC : MonoBehaviour
     //ボタン操作用
     public void Retry()//リトライ
     {
+        AS.PlayOneShot(ac);
         //PlayerPrefs.Save();//"SaveXpos","SaveYpos"を保存
         Time.timeScale = 1f;
-        SceneManager.LoadScene(retrySceneName);
+        //SceneManager.LoadScene(retrySceneName);
+        FadeManager.Instance.LoadScene(retrySceneName, 0.5f);
     }
     public void GameOver()//ゲームオーバー
     {
+        AS.PlayOneShot(ac);
+        Time.timeScale = 1f;
         PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
         PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
         PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
@@ -53,7 +59,8 @@ public class stageManagerC : MonoBehaviour
         PlayerPrefs.DeleteKey("CaMinPosy");
         //SceneManager.LoadScene(GOSceneName);
 
-        SceneManager.LoadScene(GOSceneName);
+        //SceneManager.LoadScene(GOSceneName);
+        FadeManager.Instance.LoadScene(GOSceneName, 1f);
     }
 
 
@@ -128,6 +135,7 @@ public class stageManagerC : MonoBehaviour
             bossG = GameObject.FindWithTag("boss");
             B1C = bossG.GetComponent<Boss1Controller>();
             stopI = stopUIhaikei.GetComponent<Image>();
+            AS = GetComponent<AudioSource>();
             stopmodeSwicth = false;
             DestroyMi = false;
             EventSwicth = true;
@@ -234,26 +242,26 @@ public class stageManagerC : MonoBehaviour
             }
         }
 
-        //お試し
-        if (Input.GetKeyDown(KeyCode.Delete))//PlayerPrefsは勝手に保存されているんで注意
-        {
-            PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
-            PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
-            PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
+        ////お試し
+        //if (Input.GetKeyDown(KeyCode.Delete))//PlayerPrefsは勝手に保存されているんで注意
+        //{
+        //    PlayerPrefs.DeleteKey("SaveXpos");//キーの削除
+        //    PlayerPrefs.DeleteKey("SaveYpos");//キーの削除
+        //    PlayerPrefs.DeleteKey("EventN");//キーの削除(EventNの値を削除)
 
-            PlayerPrefs.DeleteKey("SaveCXpos");
-            PlayerPrefs.DeleteKey("SaveCYpos");
-            //プレイヤーの移動範囲
-            PlayerPrefs.DeleteKey("CMaxPosx");
-            PlayerPrefs.DeleteKey("CMaxPosy");
-            PlayerPrefs.DeleteKey("CMinPosx");
-            PlayerPrefs.DeleteKey("CMinPosy");
-            //カメラの移動範囲
-            PlayerPrefs.DeleteKey("CaMaxPosx");
-            PlayerPrefs.DeleteKey("CaMaxPosy");
-            PlayerPrefs.DeleteKey("CaMinPosx");
-            PlayerPrefs.DeleteKey("CaMinPosy");
-        }
+        //    PlayerPrefs.DeleteKey("SaveCXpos");
+        //    PlayerPrefs.DeleteKey("SaveCYpos");
+        //    //プレイヤーの移動範囲
+        //    PlayerPrefs.DeleteKey("CMaxPosx");
+        //    PlayerPrefs.DeleteKey("CMaxPosy");
+        //    PlayerPrefs.DeleteKey("CMinPosx");
+        //    PlayerPrefs.DeleteKey("CMinPosy");
+        //    //カメラの移動範囲
+        //    PlayerPrefs.DeleteKey("CaMaxPosx");
+        //    PlayerPrefs.DeleteKey("CaMaxPosy");
+        //    PlayerPrefs.DeleteKey("CaMinPosx");
+        //    PlayerPrefs.DeleteKey("CaMinPosy");
+        //}
     }
     
 }
