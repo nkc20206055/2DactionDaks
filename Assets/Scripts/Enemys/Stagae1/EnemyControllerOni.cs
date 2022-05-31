@@ -9,6 +9,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     private STATE state = STATE.normal;//enumのnormalを入れる
     private STATE saveState = STATE.move;//enumを変えるとき変化するほうを保存する変数
 
+    [SerializeField] AudioClip[] ac;
     GameObject SM;
     stageManagerC SMC;
 
@@ -19,7 +20,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     //public float actionTime;//次の行動にうつる時間
 
     Renderer targetRenderer; // 判定したいオブジェクトのrendererへの参照
-
+    AudioSource AS;
 
     private GameObject playerG;//プレイヤーのゲームオブジェクトを保存する
     private Animator anim;//Animator保存用
@@ -196,6 +197,11 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
     {
         saveState = _state;
     }
+
+    public void SE(int i)//SE
+    {
+        AS.PlayOneShot(ac[i]);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -206,6 +212,7 @@ public class EnemyControllerOni : MonoBehaviour, EnemyDamageController
         anim = GetComponent<Animator>();
         playerG = GameObject.FindWithTag("Player");//タグでプレイヤーのオブジェクトか判断して入れる
         targetRenderer = GetComponent<Renderer>();
+        AS = GetComponent<AudioSource>();
         guardSwicth = true;
         attacktimeSwicth = true;
         counterHetSwicth = false;

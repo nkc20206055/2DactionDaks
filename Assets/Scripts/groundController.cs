@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class groundController : MonoBehaviour
 {
     [SerializeField] GameObject CounterObject;
-
     GameObject SM;
     stageManagerC SMC;
 
     public GameObject hpui;//HPのUIを入れる変数
+    public AudioClip ac;
     //public AudioClip Se1;//SEを鳴らすオブジェクトを入れるところ
 
     //public MaxHp;//最大HP
@@ -18,6 +18,7 @@ public class groundController : MonoBehaviour
     public float damageTime;//無敵時間
     public bool animationcancelSwicth,EventMode;
 
+    PlayerController pc;
     EcColliderController ECC;
     SpriteRenderer SR;//自分のSpriteRendererを入れる変数
     public int hp;
@@ -36,6 +37,7 @@ public class groundController : MonoBehaviour
     private bool damageSwicth;//ダメージを食らっているかどうか
     private bool damageHetSwcith;//ダメージを食らったときにうごく
     private bool damageHetOn;//攻撃を食らったかどうか
+
     void animationcancel()//アニメーションを途中で終わらせるのに使う
     {
         anim.SetBool("counterattack", false);
@@ -82,6 +84,9 @@ public class groundController : MonoBehaviour
             }
          
                 cTime += 1 * Time.deltaTime;
+            if (cTime <= 0.02f) {
+                AS.PlayOneShot(ac);
+            }
                 if (cTime < damageTime)//点滅させる
                 {
                     if (gadeSwicth == false)
@@ -106,6 +111,7 @@ public class groundController : MonoBehaviour
     {
         hp = /*MaxHp*/10;//最大hpの設定
         SM = GameObject.FindWithTag("stageManager");
+        pc = GetComponent<PlayerController>();
         SMC = SM.GetComponent<stageManagerC>();
         sR = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
@@ -206,6 +212,8 @@ public class groundController : MonoBehaviour
             if (hp <= 0)
             {
                 //Destroy(gameObject);
+                anim.Play("Destroy");
+                pc.EventMode = true;
             }
         }else if (EventMode==true)
         {
@@ -240,7 +248,7 @@ public class groundController : MonoBehaviour
                     {
 
                         Debug.Log("当たった2");
-                        //AS.PlayOneShot(Se1);//SEを鳴らす
+                        
 
                         gameObject.layer = LayerMask.NameToLayer("PlayerDamge");//レイヤーマスクを変更する
                         anim.SetBool("counterattack", true);

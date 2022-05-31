@@ -8,6 +8,7 @@ public class stageManagerC : MonoBehaviour
 {
     [SerializeField] GameObject stopUI;//一時停止で出現するUI
     [SerializeField] GameObject GameoverUI;//Gameoverで出現するUI
+    [SerializeField] GameObject GameclearUI;
     public GameObject stopUIhaikei;
 
     public int Eventnumber;//イベントを行った回数
@@ -22,9 +23,11 @@ public class stageManagerC : MonoBehaviour
     PlayerController pc;
     groundController gC;
     cameraController1 cc1;
+    Boss1Controller B1C;
 
     private Image stopI;
     private bool stopmodeSwicth, DestroyMi;
+    private bool clearSwicth;
 
     //ボタン操作用
     public void Retry()//リトライ
@@ -50,7 +53,7 @@ public class stageManagerC : MonoBehaviour
         PlayerPrefs.DeleteKey("CaMinPosy");
         //SceneManager.LoadScene(GOSceneName);
 
-        SceneManager.LoadScene(retrySceneName);
+        SceneManager.LoadScene(GOSceneName);
     }
 
 
@@ -78,7 +81,7 @@ public class stageManagerC : MonoBehaviour
             }
         }
     }
-    void GamaOver()//ゲームオーバー
+    void Gamaover()//ゲームオーバー
     {
         if (stopI.color.a>=0.7f)
         {
@@ -92,6 +95,25 @@ public class stageManagerC : MonoBehaviour
             stopI.color+= new Color(0,0,0,ss);
         }
     }
+    void GameClear()
+    {
+        if (stopI.color.a >= 1f)
+        {
+            Debug.Log("クリア");
+            Cursor.visible = true;//カーソル表示
+            GameclearUI.SetActive(true);
+        }
+        else if (stopI.color.a < 1f)
+        {
+            if (clearSwicth==true)
+            {
+                stopI.color = new Color(255, 255, 255, 0);
+                clearSwicth = false;
+            }
+            float ss = 0.5f * Time.deltaTime;
+            stopI.color += new Color(0, 0, 0, ss);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -103,11 +125,13 @@ public class stageManagerC : MonoBehaviour
             cc1 = CameraG.GetComponent<cameraController1>();
             pc = playerG.GetComponent<PlayerController>();
             gC = playerG.GetComponent<groundController>();
-            //bossG = GameObject.FindWithTag("boss");
+            bossG = GameObject.FindWithTag("boss");
+            B1C = bossG.GetComponent<Boss1Controller>();
             stopI = stopUIhaikei.GetComponent<Image>();
             stopmodeSwicth = false;
             DestroyMi = false;
             EventSwicth = true;
+            clearSwicth = true;
             //PlayerPrefs.SetString("SaveXpos","SaveYpos");//位置のセーブ用
             if (PlayerPrefs.HasKey("SaveXpos") && PlayerPrefs.HasKey("SaveYpos"))//セーブがあったら
             {
@@ -198,9 +222,13 @@ public class stageManagerC : MonoBehaviour
     {
         if (normalSwicth == false)
         {
-            if (gC.hp<=0)
+            if (B1C.hp<=0)//ボスのHPが0になったら 
             {
-                GamaOver();
+                GameClear();
+            }
+            else if (gC.hp<=0)
+            {
+                Gamaover();
             } else if (gC.hp>0) {
                 stopmode();
             }

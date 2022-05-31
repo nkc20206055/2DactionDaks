@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class stage1ManagerC : MonoBehaviour
 {
+    [SerializeField] AudioClip[] clip;
     [SerializeField] GameObject tutoralY, tutoralY2;//説明用の矢印を入れる
     [SerializeField] GameObject tutoralEnemy;
     public GameObject PlayerUI;
@@ -22,6 +23,7 @@ public class stage1ManagerC : MonoBehaviour
     cameraController1 cC1;
     Boss1Controller B1C;
     stageManagerC sMC;
+    AudioSource AS;//BGM再生用
     /*public */int TutorialNamber;//チュートリアルの順番を入れる
     float tutorialTime, MaxtutorialTime;//チュートリアル説明の時間,チュートリアルの最大時間
     float ImageFadeTime=0;
@@ -146,6 +148,7 @@ public class stage1ManagerC : MonoBehaviour
         B1C = BossG.GetComponent<Boss1Controller>();        //ボスにあるBoss1Controllerを取得
         CameraG = GameObject.Find("Main Camera");           //メインカメラを取得
         cC1 = CameraG.GetComponent<cameraController1>();    //メインカメラにあるcameraController1を取得
+        AS = CameraG.GetComponent<AudioSource>();           //メインカメラにあるAudioSourceを取得
         TutorialNamber = -1;
         MaxtutorialTime = 2;
         //GameStartSwicth = true;
@@ -202,7 +205,7 @@ public class stage1ManagerC : MonoBehaviour
             {
                 if (tutorialNSwicth==true)
                 {
-                    tutorialTextO.text = "spaceでジャンプ";
+                    tutorialTextO.text = "スペースでジャンプ";
                     tutorialTime = 0;
                     Debug.Log("ジャンプ");
                     fadeSwicth = true;
@@ -303,6 +306,8 @@ public class stage1ManagerC : MonoBehaviour
                 if (tutorialNSwicth == true)
                 {
                     //tutorialTextO.color= new Color(0f,0f,0f,0f);
+                    AS.clip = clip[0];
+                    AS.Play();//BGM再生
                     tutorialTextO.text = "";
                     tutorialbackGrund.SetActive(false);
                     Vector3 spp= new Vector3(54.32f, 0.16f, 0);
@@ -356,6 +361,8 @@ public class stage1ManagerC : MonoBehaviour
         {
             if (tutorialNSwicth==true)
             {
+                AS.clip = clip[0];
+                AS.Play();//BGM再生
                 tutorialTextO.text = "";
                 tutorialbackGrund.SetActive(false);
                 //PC.playerPosXClamp = 500f;
@@ -375,6 +382,8 @@ public class stage1ManagerC : MonoBehaviour
                 {
                     Debug.Log("動いた");
                     if (EventStratSwcith == true) {
+                        AS.Stop();
+                        AS.clip = clip[1];
                         PlayerUI.SetActive(false);
                         PC.EventMode = true;
                         gC.EventMode = true;
@@ -391,7 +400,7 @@ public class stage1ManagerC : MonoBehaviour
                     }
                     if (CameraG.transform.position.y< 23.6f)
                     {
-                        EventPos.y = 3.5f*1 * Time.deltaTime;
+                        EventPos.y = 4.5f*1 * Time.deltaTime;
                     }
                     EventPos.x = 10*1 * Time.deltaTime;
                     CameraG.transform.position += new Vector3(EventPos.x, EventPos.y, 0);
@@ -414,6 +423,7 @@ public class stage1ManagerC : MonoBehaviour
             {
                 if (EventStratSwcith==true)
                 {
+                    AS.Play();
                     PlayerUI.SetActive(true);
                     cC1.moveMax.x = 343.6f;
                     //cC1.moveMax.x = 327.2f;
@@ -426,6 +436,11 @@ public class stage1ManagerC : MonoBehaviour
                     JumpC.EventMode = false;
                     //cC1.EventMode = false;
                     EventStratSwcith = false;
+                }
+
+                if (B1C.hp<=0)
+                {
+                    AS.Stop();
                 }
             }
         }

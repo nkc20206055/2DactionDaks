@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] AudioClip[] Clip;
+
     GameObject SM;
     stageManagerC SMC;
 
@@ -13,6 +15,7 @@ public class PlayerController : MonoBehaviour
     Vector3 SaveVec;   //ˆÚ“®‚È‚Ç‚ğ•Û‘¶‚·‚é
     Rigidbody2D Rd2D;@//Rigidbody2D‚ğ•Û‘¶‚·‚é
     pacController pacC;
+    AudioSource AS;
     private Animator anim = null;
     float InputVec;    //‰¡ˆÚ“®‚ÌŒü‚«‚Ì’l‚ğ“ü‚ê‚é
 
@@ -38,6 +41,10 @@ public class PlayerController : MonoBehaviour
     public float MinsplayerPosXClamp;//¶‘¤
     public float MinsplayerPosYClamp;//‰º‘¤
 
+    public void SE(int i)
+    {
+        AS.PlayOneShot(Clip[i]);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +54,7 @@ public class PlayerController : MonoBehaviour
         SMC = SM.GetComponent<stageManagerC>();
         Rd2D = gameObject.GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-
+        AS = GetComponent<AudioSource>();
         //ˆê“I‚É“®‚©‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
         chargeSlider = GameObject.Find("attackchargeSlider").GetComponent<Slider>();
         pacC = transform.GetChild(2).gameObject.GetComponent<pacController>();
